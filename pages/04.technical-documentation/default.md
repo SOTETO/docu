@@ -33,9 +33,9 @@ Getting this motor running requires more than a set of loosely coupled microserv
 
 | Category | Name | URL | Purpose |
 | -------- | ---- | --- | ------- |
-| CLI | heureka | [https://github.com/SOTETO/heureka](https://github.com/SOTETO/heureka?target=_blank) | |
-| Dockerfile | grav-dockerfile | [https://github.com/SOTETO/grav-dockerfile](https://github.com/SOTETO/grav-dockerfile?target=_blank) | |
-| Content | docu | [https://github.com/SOTETO/docu](https://github.com/SOTETO/docu?target=_blank) | |
+| CLI | heureka | [https://github.com/SOTETO/heureka](https://github.com/SOTETO/heureka?target=_blank) | Implements a CLI to deploy the Heureka! architecture and environment. |
+| Dockerfile | grav-dockerfile | [https://github.com/SOTETO/grav-dockerfile](https://github.com/SOTETO/grav-dockerfile?target=_blank) | A dockerfile used to deploy [GRAV](https://getgrav.org/?target=_blank) as part of the Heureka! environment. |
+| Content | docu | [https://github.com/SOTETO/docu](https://github.com/SOTETO/docu?target=_blank) | Contains the content of the Heureka! documentation and is cloned on every hosting system. |
 | Backend | dispenser | [https://github.com/SOTETO/dispenser](https://github.com/SOTETO/dispenser?target=_blank) | Handles a database to instantiate a navigation and hosts a shared CSS library that can be used by all microservices. |
 | Widget | vca-widget-navigation | [https://github.com/SOTETO/vca-widget-navigation](https://github.com/SOTETO/vca-widget-navigation?target=_blank) | A widget that implements UI elements for a navigation. It is written using [Vue.js](https://vuejs.org/?target=_blank). |
 | Widget | vca-widget-base | [https://github.com/SOTETO/vca-widget-base](https://github.com/SOTETO/vca-widget-base?target=_blank) | A widget that implements basic UI elements that can be used by all frontend applications. It is written using [Vue.js](https://vuejs.org/?target=_blank). |
