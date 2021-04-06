@@ -3,7 +3,7 @@ title: Create a microservice
 taxonomy:
     category: how-to
 ---
-# How To: Create a microservice
+# Create a microservice
 Creating a microservice should by possible by using the technologies you know. At the very beginning you have to setup a microservice environment that is very similar to the production environment.   
 In contrast to a production system, the development of a new microservice requires to have access to 
 * the APIs of the already existing microservices
@@ -19,7 +19,14 @@ In the development environment of Heureka!, the Drops API will be available at `
 
 Just as well, the [NATS](https://nats.io/) message broker is used by the Heureka! microservice configuration to exchange messages between the services. It is available at `localhost:4222` or `172.3.150.1:4222`.
 
-## Integration in navigation
+## Integration in the architecture
+The two main challenges to integrate a new service are 
+* Having a [shared session](../../architecture/shared-session)
+* Develop [UI elements that are reusable by other services](../../architecture/dUIfc#widgets)
+
+Currently, the [shared session](../../architecture/shared-session) challenge is addressed by the Heureka!-OAuth2 handshake. The [OAuth2 handshake HowTo](../oauth2-handshake) explains the integration in the shared session. The [widgets HowTo](../widgets) explains the implementation of reusable UI elements and also there usage.
+
+## Integration in the navigation
 Cloning the [Heureka! console](https://github.com/SOTETO/heureka) will create the `<path-to-heureka-console>/.docker-conf/mode_dev/navigation/GlobalNav.json` and 
 `<path-to-heureka-console>/.docker-conf/mode_dev/navigation/noSignIn.json`. Change the `GlobalNav.json` to add a menue entry for pages of your new microservice 
 to add it to the menue after a successful login and to the `noSignIn.json`, if the entry should be available without an established session.

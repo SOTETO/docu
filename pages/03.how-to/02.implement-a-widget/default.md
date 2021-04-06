@@ -1,6 +1,6 @@
 ---
 title: Implement a widget
-slug: implement-widget
+slug: widgets
 ---
 # How to implement a widget
 Implementing a widget means to develop an user interface (UI) element that is reusable by other microservice developers. This guide limits this approach to reusable UI elements for websites (HTML, CSS and JS) and it is using [Vue.js](https://vuejs.org/?target=_blank) to implement it, since it supports our core concept of decomposed UI elements as its own core concept. Furthermore, [Vue.js](https://vuejs.org/?target=_blank) advertises itself with versatility, thus it can be used to implement a library of UI elements, what is exactly what we like to do. Additionally, guides using alternative technologies (e.g. [React](https://reactjs.org/?target=_blank)) should be written.
