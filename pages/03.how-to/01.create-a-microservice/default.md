@@ -26,6 +26,7 @@ The two main challenges to integrate a new service are
 
 Currently, the [shared session](../../architecture/shared-session) challenge is addressed by the Heureka!-OAuth2 handshake. The [OAuth2 handshake HowTo](../oauth2-handshake) explains the integration in the shared session. The [widgets HowTo](../widgets) explains the implementation of reusable UI elements and also there usage.
 
+### Basic styling
 Additionally, you have to use the shared CSS by adding
 ```
 <link rel="stylesheet" type="text/css" media="screen" href="/dispenser/css/vca.css">
@@ -34,10 +35,49 @@ to your HTML files.
 
 !!! You can use basic page elements to replicate the corporate design that is already implemented. These are delivered as widgets by [vca-widget-base](https://github.com/SOTETO/vca-widget-base?target=_blank).
 
-## Integration in the navigation
+### Showing the navigation
+The navigation in the default layout is shown as part of a header and a footer. These elements are implemented as widgets ([vca-widget-navigation](https://github.com/SOTETO/vca-widget-navigation?target=_blank)) and can be integrated into the page that is rendered by your application. See the [HowTo widgets](../widgets) article for a detailed explanation. Subsequently is shown an example for a [vue.js](https://vuejs.org/?target=_blank) application:
+```
+<template>
+    <div id="ms-frontend-app">
+        <WidgetTopNavigation />
+        <div id="content">
+            <router-view/>
+        </div>
+        <WidgetBottomNavigation />
+    </div>
+</template>
+
+<script>
+    import { WidgetTopNavigation, WidgetBottomNavigation } from 'vca-widget-navigation';
+    export default {
+        name: 'ms-frontend-app',
+        components: { WidgetTopNavigation, WidgetBottomNavigation }
+    }
+</script>
+
+<style lang="less">
+    #arise {
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+        color: #2c3e50;
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        min-height: min-content;
+    }
+    #content {
+        flex-grow: 1;
+        flex-shrink: 0;	
+        display: flex;
+        overflow: auto;
+    }
+</style>
+```
+
+### Integration in the navigation
 Cloning the [Heureka! console](https://github.com/SOTETO/heureka) will create the `<path-to-heureka-console>/.docker-conf/mode_dev/navigation/GlobalNav.json` and 
-`<path-to-heureka-console>/.docker-conf/mode_dev/navigation/noSignIn.json`. Change the `GlobalNav.json` to add a menue entry for pages of your new microservice 
-to add it to the menue after a successful login and to the `noSignIn.json`, if the entry should be available without an established session.
+`<path-to-heureka-console>/.docker-conf/mode_dev/navigation/noSignIn.json`. Change the `GlobalNav.json` (menue after a successful login) to add a menue entry for pages of your new microservice and to the `noSignIn.json`, if the entry should be available without an established session.
 
 Subsequently, you have to reload your local microservice configuration by execute `rm` and `up` in the development environment in the Heureka! console.
 
