@@ -26,6 +26,14 @@ The two main challenges to integrate a new service are
 
 Currently, the [shared session](../../architecture/shared-session) challenge is addressed by the Heureka!-OAuth2 handshake. The [OAuth2 handshake HowTo](../oauth2-handshake) explains the integration in the shared session. The [widgets HowTo](../widgets) explains the implementation of reusable UI elements and also there usage.
 
+Additionally, you have to use the shared CSS by adding
+```
+<link rel="stylesheet" type="text/css" media="screen" href="/dispenser/css/vca.css">
+```
+to your HTML files.
+
+!!! You can use basic page elements to replicate the corporate design that is already implemented. These are delivered as widgets by [vca-widget-base](https://github.com/SOTETO/vca-widget-base?target=_blank).
+
 ## Integration in the navigation
 Cloning the [Heureka! console](https://github.com/SOTETO/heureka) will create the `<path-to-heureka-console>/.docker-conf/mode_dev/navigation/GlobalNav.json` and 
 `<path-to-heureka-console>/.docker-conf/mode_dev/navigation/noSignIn.json`. Change the `GlobalNav.json` to add a menue entry for pages of your new microservice 
