@@ -20,3 +20,11 @@ If you are a software developer, you will see that you can use your existing exp
 		Widgets allow you to compose the user interface of different elements from all running microservices. You will not have to implement the same user interface elements as already implemented by developers of other services. Just reuse it and support others with your own widgets!
 	</div>
 </div>
+<div style="display: flex; flex-direction: row; justify-content: space-between; align-content: space-between; margin: 3em 0 0; padding: 3em 2em 3em; background-color: #f8f9fa">
+	<div style="padding-right: 3em; text-align:justify;">
+		Use the technology you know! You do <strong>not</strong> need to learn a programming language used by the already implemented microservices. Just basic skills in HTTP, HTML, CSS, Javascript, RESTful webservices are required.
+	</div>
+	<div style="display: flex; justify-content: flex-end;">
+		<a rel="lightbox" data-width="600" data-height="400" href="language.png" target="_blank" style="display: flex; justify-content: flex-end;"><img title="Free choice of technology" alt="" src="language.png" width="70%" /></a>
+	</div>
+</div>
