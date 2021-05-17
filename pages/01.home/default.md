@@ -12,3 +12,11 @@ If you are a software developer, you will see that you can use your existing exp
 
 !!!! Getting started by pulling the [Heureka! CLI](https://github.com/SOTETO/heureka?target=_blank) and reading its [readme](https://github.com/SOTETO/heureka#readme?target=_blank) to setup your Heureka! environment! [How To create a microservice](../how-to/create-a-microservice) explains in detail the setup to start implementing your first microservice.
 
+<div style="display:flex;flex-direction:row;margin: 3em 0 0; padding: 3em 2em 3em; background-color: #f8f9fa">
+	<div>
+		<a rel="lightbox" data-width="600" data-height="400" href="widgets.png" target="_blank"><img title="Basic widget concept" alt="" src="widgets.png" /></a>
+	</div>
+	<div style="padding-left: 4em; text-align:justify;">
+		Widgets allow you to compose the user interface of different elements from all running microservices. You will not have to implement the same user interface elements as already implemented by developers of other services. Just reuse it and support others with your own widgets!
+	</div>
+</div>
