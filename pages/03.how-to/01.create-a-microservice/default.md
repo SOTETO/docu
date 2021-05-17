@@ -26,6 +26,8 @@ The two main challenges to integrate a new service are
 
 Currently, the [shared session](../../architecture/shared-session) challenge is addressed by the Heureka!-OAuth2 handshake. The [OAuth2 handshake HowTo](../oauth2-handshake) explains the integration in the shared session. The [widgets HowTo](../widgets) explains the implementation of reusable UI elements and also there usage.
 
+You can develop the UI by the technologies you know! Thus, you will not be limited to use the framework of your choice. Just understand and use the [existing widgets](../../architecture/dUIfc#widgets) to extend your UI by elements provided by the other microservices. Additionally, you can use a basic CSS to style your microservice interface the same way as the rest of the application and you can [implement your own reusable user interface elements](../widgets) as widgets that can be used by other microservice developers.
+
 ### Basic styling
 Additionally, you have to use the shared CSS by adding
 ```
