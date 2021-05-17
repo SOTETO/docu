@@ -49,7 +49,7 @@ Da Microservices weitgehend unabhängig voneinander agieren, ist eine freie Wahl
 Einschränkungen, die nachfolgend im Abschnitt [Konzepte](#concepts) aufgeführt werden. Auch koordinative Abhängigkeiten sind stark eingeschränkt und so bietet eine
 derartige Architektur die Möglichkeit die zuvor beschriebene Projektkultur zu etablieren.
 
-![The microservice architecture of the Pool<sup>2</sup>](image://Pool2-ms.png?resize=600,300&classes=float-left)
+![The microservice architecture of the Pool2](image://Pool2-ms.png?resize=600,300&classes=float-left)
 
 Die funktionalen Anforderungen an den Pool<sup>2</sup> werden im ersten Schritt durch den Funktionsumfang des ersten Pool definiert. Abbildung 1 zeigt die
 Projektion der Funktionen des Pool auf Microservices des Pool<sup>2</sup>. Drops ist für die Nutzerverwaltung verantwortlich, während Stream die Finanzen und
