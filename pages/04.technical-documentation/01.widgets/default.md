@@ -9,6 +9,8 @@ There are several already implemented widgets (see [Technical Documentation](../
 * [vca-widget-navigation](https://github.com/SOTETO/vca-widget-navigation?target=_blank)
 * [vca-widget-user](https://github.com/SOTETO/vca-widget-user?target=_blank)
 
+You will find all required technical details for a widget in the readme files of the widget projects. There are data binding and event propagation, but also nesting of UI elements by using slots.
+
 | Widget | Project | Image |
 | ------ | ------- | ----- |
 | VcA Frame - The frame describes the base of a Pool<sup>2</sup> page. Content is organized in VcA Boxes and these boxes are part of the VcA Columns which are positioned by the VcA Frame. Additionally, it is possible to add a title. | [vca-widget-base](https://github.com/SOTETO/vca-widget-base?target=_blank) | ![The VcA Frame as an example screenshot.](https://github.com/SOTETO/vca-widget-base/raw/master/public/images/screenshot.png?resize=800,400) |
