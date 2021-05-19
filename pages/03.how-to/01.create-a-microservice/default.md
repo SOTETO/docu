@@ -28,6 +28,11 @@ Currently, the [shared session](../../architecture/shared-session) challenge is 
 
 You can develop the UI by the technologies you know! Thus, you will not be limited to use the framework of your choice. Just understand and use the [existing widgets](../../architecture/dUIfc#widgets) to extend your UI by elements provided by the other microservices. Additionally, you can use a basic CSS to style your microservice interface the same way as the rest of the application and you can [implement your own reusable user interface elements](../widgets) as widgets that can be used by other microservice developers.
 
+### Docker integration
+The setup of a new microservice as part of the Heureka! architecture ist described in the [README of the Heureka! CLI](https://github.com/SOTETO/heureka#development-environment---create-a-new-microservice).
+
+If any additional service is required (e.g. database), just set it up as a docker container and initiate a connection by its IP address.
+
 ### Basic styling
 Additionally, you have to use the shared CSS by adding
 ```
