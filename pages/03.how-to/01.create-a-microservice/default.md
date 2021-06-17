@@ -43,7 +43,7 @@ to your HTML files.
 !!! You can use basic page elements to replicate the corporate design that is already implemented. These are delivered as widgets by [vca-widget-base](https://github.com/SOTETO/vca-widget-base?target=_blank).
 
 ### Showing the navigation
-The navigation in the default layout is shown as part of a header and a footer. These elements are implemented as widgets ([vca-widget-navigation](https://github.com/SOTETO/vca-widget-navigation?target=_blank)) and can be integrated into the page that is rendered by your application. See the [HowTo widgets](../widgets) article for a detailed explanation. Subsequently is shown an example for a [vue.js](https://vuejs.org/?target=_blank) application:
+The navigation in the default layout is shown as part of a header and a footer. These elements are implemented as widgets ([heureka-widget-navigation](https://github.com/SOTETO/heureka-widget-navigation-2021?target=_blank)) and can be integrated into the page that is rendered by your application. See the [HowTo widgets](../widgets) article for a detailed explanation. Subsequently is shown an example for a [vue.js](https://vuejs.org/?target=_blank) application:
 ```
 <template>
     <div id="ms-frontend-app">
@@ -56,7 +56,9 @@ The navigation in the default layout is shown as part of a header and a footer. 
 </template>
 
 <script>
-    import { WidgetTopNavigation, WidgetBottomNavigation } from 'vca-widget-navigation';
+    import { WidgetTopNavigation, WidgetBottomNavigation } from 'heureka-widget-navigation-2021';
+    import 'heureka-widget-navigation-2021/dist/heureka-widget-navigation-2021.css'
+    
     export default {
         name: 'ms-frontend-app',
         components: { WidgetTopNavigation, WidgetBottomNavigation }
