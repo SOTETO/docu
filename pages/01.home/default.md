@@ -12,7 +12,7 @@ If you are a software developer, you will see that you can use your existing exp
 
 !!!! Getting started by pulling the [Heureka! CLI](https://github.com/SOTETO/heureka?target=_blank) and reading its [readme](https://github.com/SOTETO/heureka#readme?target=_blank) to setup your Heureka! environment! [How To create a microservice](../how-to/create-a-microservice) explains in detail the setup to start implementing your first microservice.
 
-!!! **Required skills:** You need some basic web development knowledge about HTML, JS, CSS and HTTP. Furthermore, you will come in touch with RESTful webservices and Nginx web servers. *Implementing some webservices are great projects to learn about webservices and Nginx web servers!*
+!!! **Required skills:** You need some basic web development knowledge about HTML, JS, CSS and HTTP. Furthermore, you will come in touch with RESTful webservices, Docker and Nginx web servers. *Implementing some webservices are great projects to learn about webservices, Docker and Nginx web servers!*
 
 <div style="display:flex;flex-direction:row;margin: 3em 0 0; padding: 3em 2em 3em; background-color: #f8f9fa">
 	<div>
