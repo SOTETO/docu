@@ -12,7 +12,8 @@ In contrast to a production system, the integration of a new microservice requir
 * the microservice routing proxy to add your new service to the architecture
 
 You can setup the environment by using the [Heureka! console](https://github.com/SOTETO/heureka). Pull it from github and follow the [steps described by the readme](https://github.com/SOTETO/heureka#how-to-add-a-new-microservice) (How to add a new microservice). 
-Afterwards, you can start your local applications as part of the microservice configuration. You will have access to the internal docker network.
+
+Afterwards, you can start your local applications as part of the microservice configuration. You will have access to the internal docker network, although you are not deploying your applications using docker (consider the [configuration of local applications](https://github.com/SOTETO/heureka#configure-local-applications).
 
 ## Available APIs
 You are running a current microservice configuration, including [drops](https://github.com/SOTETO/drops) and [arise](https://github.com/SOTETO/arise). Most important the development of a new microservice is the usage of the [drops API](https://github.com/SOTETO/drops#webservice) to read users and their social structure and the [OAuth-Handshake to initiate a shared session](https://github.com/SOTETO/drops#oauth2-based-session-handshake).
