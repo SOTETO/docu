@@ -4,8 +4,10 @@ slug: oauth2-handshake
 ---
 # OAuth2 Handshake
 Setting up the OAuth2 handshake requires two steps:
-(1) You ha/oauth2/code/gete to register your microservice as an OAuth2 client in _Drops_. To do so, you have to contact the administrator of the Pool<sup>2</sup> and please her / him to add your microservice to the _Drops_ database. If you setup a development system, you are the administrator by yourself. In that case consider the description below.
+(1) You need to register your microservice as an OAuth2 client in _Drops_. To do so, you have to contact the administrator of the Pool<sup>2</sup> and please her / him to add your microservice to the _Drops_ database. If you setup a development system, you are the administrator by yourself. In that case consider the description below.
 (2) You have to implement your part of the handshake.
+
+!!! This implementation just removes the question for consent of the user for sharing the personal data. So, clients libaries can still be used without additional code work.
 
 ## Setup a microservice as OAuth2 client in _Drops_
 First, you have to log into Drops as an administrator. Use the Heureka! console to to configure your user as an administrator. Second, create the microservice as a OAuth2 client: Open the appropriate form using the menu and enter an `ID`, a `Secret`, a `Redirect URL`, and a `Grant type` for the new service.
