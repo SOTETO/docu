@@ -7,6 +7,8 @@ This page describes the REST APIs of the microservices.
 
 !!! Please, take a look at these interfaces to discover available data objects. We strongly suggest to not inspect the database structures, since there could be different technologies in use and it would break the concept of microservices to directly use the databases of other MS.
 
+!!! If you just want to print a data object that is managed by another microservice, take a look at the [widgets documentation](../widgets). Do not use a REST API to catch the data and implement your own visualization, if there is an usable widget!
+
 ## Drops
 The API is documented as an [Open API v3](https://www.openapis.org/?target=_blank) specification in the [swagger.json](https://github.com/SOTETO/drops/blob/develop/swagger.json?target=_blank) file that is part of the [_Drops_ repository](https://github.com/SOTETO/drops?target=_blank).
 
