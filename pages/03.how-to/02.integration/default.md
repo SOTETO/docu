@@ -18,6 +18,8 @@ Afterwards, you can start your local applications as part of the microservice co
 You are running a current microservice configuration, including [drops](https://github.com/SOTETO/drops) and [arise](https://github.com/SOTETO/arise). Most important the development of a new microservice is the usage of the [drops API](https://github.com/SOTETO/drops#webservice) to read users and their social structure and the [OAuth-Handshake to initiate a shared session](https://github.com/SOTETO/drops#oauth2-based-session-handshake).
 Using the default configuration of a newly created microservice, the Drops API will be available at `172.3.0.2:9000` from the internal docker network or at `localhost:9000/drops` sending the request through the nginx proxy.
 
+!!! Please, take a look at these interfaces to discover available data objects. We strongly suggest to not inspect the database structures, since there could be different technologies in use and it would break the concept of microservices to directly use the databases of other MS.
+
 Just as well, the [NATS](https://nats.io/) message broker is used by the Heureka! microservice configuration to exchange messages between the services. It is available at `172.3.150.1:4222` from the internal network or at `localhost:4222` sending the request through the nginx proxy.
 
 ## Integration in the architecture
