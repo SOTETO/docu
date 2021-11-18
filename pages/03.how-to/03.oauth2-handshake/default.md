@@ -4,7 +4,7 @@ slug: oauth2-handshake
 ---
 # OAuth2 Handshake
 Setting up the OAuth2 handshake requires two steps:
-(1) You have to register your microservice as an OAuth2 client in _Drops_. To do so, you have to contact the administrator of the Pool<sup>2</sup> and please her / him to add your microservice to the _Drops_ database. If you setup a development system, you are the administrator by yourself. In that case consider the description below.
+(1) You ha/oauth2/code/gete to register your microservice as an OAuth2 client in _Drops_. To do so, you have to contact the administrator of the Pool<sup>2</sup> and please her / him to add your microservice to the _Drops_ database. If you setup a development system, you are the administrator by yourself. In that case consider the description below.
 (2) You have to implement your part of the handshake.
 
 ## Setup a microservice as OAuth2 client in _Drops_
@@ -23,13 +23,13 @@ _Drops_ implements the `authorization code` handshake. Thus, the client has to r
 Implementation of the OAuth2 handshake requires to know the endpoints of _Drops_, but also to know which enpoints have to be implemented.
 
 The following endpoints of _Drops_ can be used:
-* `drops.authorization.code = ${drops.url.base}/oauth2/code/get/${ID}`
+* `drops.authorization.code = ${drops.url.base}/oauth2/code/get?client_id=${ID}&response_type=code&state=${any_context_string}&redirect_uri=${redirect_uri}&ajax=false`
 * `drops.access.token = ${drops.url.base}/oauth2/access_token`
 * `drops.get.profile = ${drops.url.base}/oauth2/rest/profile?access_token=${drops.access.token}`
 
 !!! You have to replace the `${drops.url.base}` by the host and potentially path to the deployed _Drops_ microservice.
 
-There are some parameter to consider. First, to get an `authorization_code` _Drops_ needs to identify your service. For this purpose, add the `ID` of your microservice as a path parameter: `${drops.url.base}/oauth2/code/get/${ID}`.
+There are some parameter to consider. First, to get an `authorization_code` _Drops_ needs to identify your service. For this purpose, add the `ID` of your microservice and the `redirect_uri` are required in the query string. Furthermore, you can attach a `state` that will be returned to you, to encode some context information, like the current page of the user. Additionally, the optional boolean parameter `ajax` encodes, if the response should be `JSON` encoded in any case (including the case no user is currently logged in) or if Drops is allowed to redirect in some cases to the login page: `${drops.url.base}/oauth2/code/get?client_id=${ID}&response_type=code&state=${any_context_string}&redirect_uri=${redirect_uri}&ajax=false`.
 
 The access token endpoint expects some query parameter: `grant_type`, `client_id`, `client_secret`, `redirect_uri`, and `code`. While the `grant_type` has to be the currently chosen one (e.g. `authorization_code`), the next three parameter identify the microservice and have to be the same as added to _Drops_. The `code` parameter has to contain the received `authorization code`.
 
