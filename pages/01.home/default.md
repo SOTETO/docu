@@ -12,6 +12,8 @@ If you are a software developer, you will see that you can use your existing exp
 
 !!!! Getting started by pulling the [Heureka! CLI](https://github.com/SOTETO/heureka?target=_blank) and reading its [readme](https://github.com/SOTETO/heureka#readme?target=_blank) to setup your Heureka! environment! [How To create a microservice](../how-to/create-a-microservice) explains in detail the setup to start implementing your first microservice.
 
+!!! **Required skills:** You need some basic web development knowledge about HTML, JS, CSS and HTTP. Furthermore, you will come in touch with RESTful webservices and Nginx web servers. *Implementing some webservices are great projects to learn about webservices and Nginx web servers!*
+
 <div style="display:flex;flex-direction:row;margin: 3em 0 0; padding: 3em 2em 3em; background-color: #f8f9fa">
 	<div>
 		<a rel="lightbox" data-width="600" data-height="400" href="widgets.png" target="_blank"><img title="Basic widget concept" alt="" src="widgets.png" /></a>
@@ -22,9 +24,10 @@ If you are a software developer, you will see that you can use your existing exp
 </div>
 <div style="display: flex; flex-direction: row; justify-content: space-between; align-content: space-between; margin: 3em 0 0; padding: 3em 2em 3em; background-color: #f8f9fa">
 	<div style="padding-right: 3em; text-align:justify;">
-		Use the technology you know! You do <strong>not</strong> need to learn a programming language used by the already implemented microservices. Just basic skills in HTTP, HTML, CSS, Javascript, RESTful webservices are required.
+		<p>Use the technology you know! You do <strong>not</strong> need to learn a programming language used by the already implemented microservices. Just basic skills in HTTP, HTML, CSS, Javascript, RESTful webservices are required.</p>
 	</div>
 	<div style="display: flex; justify-content: flex-end;">
 		<a rel="lightbox" data-width="600" data-height="400" href="language.png" target="_blank" style="display: flex; justify-content: flex-end;"><img title="Free choice of technology" alt="" src="language.png" width="70%" /></a>
 	</div>
 </div>
+<div>
