@@ -10,9 +10,17 @@ Setting up the OAuth2 handshake requires two steps:
 !!! This implementation just removes the question for consent of the user for sharing the personal data. So, clients libaries can still be used without additional code work.
 
 ## Setup a microservice as OAuth2 client in _Drops_
-First, you have to log into Drops as an administrator. Use the Heureka! console to to configure your user as an administrator. Second, create the microservice as a OAuth2 client: Open the appropriate form using the menu and enter an `ID`, a `Secret`, a `Redirect URL`, and a `Grant type` for the new service.
 
-The `ID` can be any unique identifier, for example the microservices name. The `Secret` should be known only to _Drops_ and the new microservice. Thus, I would recommend to generate a key using [KeePass](https://keepass.info/?target=_blank) enter it into the form, save it in a KeePass database, and enter it to the microservices deployment configuration. The `Redirect URL` will be defined by the microservice developer and should be given the Pool<sup>2</sup> administrator. The given URL identifies the endpoint that is used by _Drops_ to redirect the users client back, if the authorization code has been successfully created. The chosen `Grant types` define the possible authorization workflows possible between _Drops_ and the microservice. Currently, _Drops_ allows only `authorization code`.
+1. You have to log into Drops as an administrator. Use the Heureka! console to to configure your user as an administrator. 
+2. Create the microservice as an OAuth2 client: Open the form using the menu (`Admin` > `Oauth Clients`) and enter an `ID`, a `Secret`, a `Redirect URL`, and a `Grant type` for the new service.
+
+!!! The `ID` can be any unique identifier, for example the microservices name. 
+
+!!! The `Secret` should be known only to _Drops_ and the new microservice. Thus, I would recommend to generate a key using [KeePass](https://keepass.info/?target=_blank) enter it into the form, save it in a KeePass database, and enter it to the microservices deployment configuration. 
+
+!!! The `Redirect URL` will be defined by the microservice developer and should be given the Pool<sup>2</sup> administrator. The given URL identifies the endpoint that is used by _Drops_ to redirect the users client back, if the authorization code has been successfully created. 
+
+!!! The chosen `Grant types` define the possible authorization workflows possible between _Drops_ and the microservice. Currently, _Drops_ allows only `authorization code`.
 
 ## Protocol flow
 The [RFC 6749](https://tools.ietf.org/html/rfc6749?target=_blank) defines multiple possible interactions between clients and OAuth provider. A general workflow is defined in §1.2 of the protocol.
