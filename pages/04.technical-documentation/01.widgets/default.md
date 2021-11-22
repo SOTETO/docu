@@ -3,7 +3,11 @@ title: Widgets
 slug: widgets
 ---
 # Widgets
-There are several already implemented widgets (see [Technical Documentation](../)). Here you can find all information you need to use the widgets. These are the different widget projects, which implement one or more reusable UI elements:
+There are several already implemented widgets (see [Technical Documentation](../)). Here you can find all information you need to use the widgets.
+
+!!! Widgets are **complete small software pieces**. Thus, do not try to rework its functionalty or user interface design. If you need a different style or functionality try to use the REST-APIs of the corresponding back end systems and implement your own user interface. Furthermore, you can contact the software developers of the widget.
+
+These are the different widget projects, which implement one or more reusable UI elements:
 
 * [vca-widget-base](https://github.com/SOTETO/vca-widget-base?target=_blank)
 * [heureka-widget-navigation-2021](https://github.com/SOTETO/heureka-widget-navigation-2021?target=_blank)
