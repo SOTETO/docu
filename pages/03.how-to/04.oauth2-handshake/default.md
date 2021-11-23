@@ -51,6 +51,8 @@ Additionally, you have to prepare an endpoint by yourself, that takes an `author
 
 Example endpoints: `https://ms.de/` (takes the code as part of the path), or `https://ms.de?code=` (expects the code as a query parameter with the name code).
 
+!!! If you are implementing a frontend application that is using REST calls to communicate with a backend system, you need to set the parameter `ajax=true` to receive `JSON` in all cases (success and failure). Thus, you can handle the response by yourself.
+
 ## Example
 An example controller implemented using [Play2 Framework](https://www.playframework.com/?target=_blank) and written in [Scala](https://www.scala-lang.org/?target=_blank) could have the following functions:
 ```
