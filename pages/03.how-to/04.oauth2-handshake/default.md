@@ -7,6 +7,8 @@ Setting up the OAuth2 handshake requires two steps:
 (1) You need to register your microservice as an OAuth2 client in _Drops_. To do so, you have to contact the administrator of the Pool<sup>2</sup> and please her / him to add your microservice to the _Drops_ database. If you setup a development system, you are the administrator by yourself. In that case consider the description below.
 (2) You have to implement your part of the handshake.
 
+The OAuth handshake implements only the **exchange of user data**. It does **not** implements a users session for your microservice. Thus, after implementing the OAuth handshake, you will have access to the user data and you can **use the libraries you know** to implement a **session for the user and your microservice**.
+
 !!! This implementation just removes the question for consent of the user for sharing the personal data. So, clients libaries can still be used without additional code work.
 
 ## Setup a microservice as OAuth2 client in _Drops_
