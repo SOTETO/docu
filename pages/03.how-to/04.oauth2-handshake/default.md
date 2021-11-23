@@ -12,6 +12,7 @@ The OAuth handshake implements only the **exchange of user data**. It does **not
 !!! This implementation just removes the question for consent of the user for sharing the personal data. So, clients libaries can still be used without additional code work.
 
 ## Setup a microservice as OAuth2 client in _Drops_
+Considering the [discussion about the number of systems for one microservices](../../technical-documentation), keep in mind that you normally have to register only one OAuth client for your microservice. No matter how many systems are part of your microservice.
 
 1. You have to log into Drops as an administrator. Use the Heureka! console to to configure your user as an administrator. 
 2. Create the microservice as an OAuth2 client: Open the form using the menu (`Admin` > `Oauth Clients`) and enter an `ID`, a `Secret`, a `Redirect URL`, and a `Grant type` for the new service.
