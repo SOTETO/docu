@@ -94,7 +94,7 @@ The navigation in the default layout is shown as part of a header and a footer. 
 Cloning the [Heureka! console](https://github.com/SOTETO/heureka) will create the `<path-to-heureka-console>/microservices/ms-<name>/.docker-conf/navigation/GlobalNav.json` and 
 `<path-to-heureka-console>/microservices/ms-<name>/.docker-conf/navigation/noSignIn.json`. Change the `GlobalNav.json` (menue after a successful login) to add a menue entry for pages of your new microservice and to the `noSignIn.json`, if the entry should be available without an established session.
 
-Subsequently, you have to reload your local microservice configuration by execute `rm` and `up` in your microservices  environment of the Heureka! console (considering the default implementation of your `env.sh`).
+!!! Subsequently, you have to reload your navigation by calling `GET http://<your-host>/dispenser/navigation/init`.
 
 ## Integration in documentation
 *First of all: *Use your repository and the readme of your microservice' project to document specific functions of your service. If you want to write an How-To or 
