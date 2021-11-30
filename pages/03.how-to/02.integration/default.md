@@ -39,6 +39,8 @@ If any additional service is required (e.g. database), just set it up as a docke
 
 !!! Consider every hard coded HTTP call! If there are some calls addressing `localhost`, you probably will have to replace them, since `localhost` addresses the docker container of your application. So, to address other microservices, you should use the internal IP address of the corresponding docker container. Services that are deployed next to the web server of your application should also be deployed in docker containers having an internal IP address.
 
+!!! Consider that your microservice will be available behind a specific path configured in the Nginx. For some frameworks it is required to configure the path name as a base path. If it is required and not properly configured, you will mostly see a whitescreen.
+
 ### Basic styling
 Additionally, you have to use the shared CSS by adding
 ```
