@@ -35,6 +35,8 @@ You can develop the UI by the technologies you know! Thus, you will not be limit
 ### Docker integration
 The setup of a new microservice as part of the Heureka! architecture ist described in the [README of the Heureka! CLI](https://github.com/SOTETO/heureka#how-to-add-a-new-microservice).
 
+!!! There is no need to run your application(s) as a docker container. You can just run your applications on distinct ports and configure the Nginx to point on these ports.
+
 If any additional service is required (e.g. database), just set it up as a docker container and initiate a connection by its IP address.
 
 !!! Consider every hard coded HTTP call! If there are some calls addressing `localhost`, you probably will have to replace them, since `localhost` addresses the docker container of your application. So, to address other microservices, you should use the internal IP address of the corresponding docker container. Services that are deployed next to the web server of your application should also be deployed in docker containers having an internal IP address.
