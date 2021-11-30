@@ -9,6 +9,8 @@ Setting up the OAuth2 handshake requires two steps:
 
 The OAuth handshake implements only the **exchange of user data**. It does **not** implements a users session for your microservice. Thus, after implementing the OAuth handshake, you will have access to the user data and you can **use the libraries you know** to implement a **session for the user and your microservice**.
 
+!!! The `Cookie` with the name `VCA_POOL_DROPS` is encrypted by *Drops*. Do **not** try to use this cookie! Instead, implement a session handled by your own application.
+
 !!! This implementation just removes the question for consent of the user for sharing the personal data. So, clients libaries can still be used without additional code work.
 
 ## Setup a microservice as OAuth2 client in _Drops_
