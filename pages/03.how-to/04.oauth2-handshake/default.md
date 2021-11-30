@@ -54,6 +54,8 @@ Example endpoints: `https://ms.de/` (takes the code as part of the path), or `ht
 
 !!! If you are implementing a frontend application that is using REST calls to communicate with a backend system, you need to set the parameter `ajax=true` to receive `JSON` in all cases (success and failure). Thus, you can handle the response by yourself.
 
+!!! If you are running your microservice on another port than the Heureka! platform, *Drops* will throw some `CORS` errors ([https://developer.mozilla.org/de/docs/Web/HTTP/CORS/Errors](https://developer.mozilla.org/de/docs/Web/HTTP/CORS/Errors?target=_blank)). You can solve the issue by [adding your domain name and the chosen port to the allowed origins array of the Drops backend](https://github.com/SOTETO/heureka#changing-server-name). Alternatively, you can [add it to the configured server names](https://github.com/SOTETO/heureka#server-name).
+
 ## Example
 An example controller implemented using [Play2 Framework](https://www.playframework.com/?target=_blank) and written in [Scala](https://www.scala-lang.org/?target=_blank) could have the following functions:
 ```
