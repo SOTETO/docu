@@ -4,63 +4,41 @@ slug: dUIfc
 ---
 
 # Dynamic UI Fragment Composition
+The microservice architecture primarily addresses the distribution of responsibility within the project. Considering _loosely
+coupling_ and _high cohesion_ also the introduction of a central user interface (UI) is not expediently. Implicitly, the diverse small project teams are responsible for their microservices including the user interface.
 
-Die angestrebte Microservice-Architektur dient vorrangig der Verteilung von Verantwortung innerhalb des Projekts. Im Sinne der Prinzipien _Loosely
-coupling_ und _High Cohesion_ ist also auch die Einführung eines zentralen User Interface (UI) Services nicht zielführend. Dies impliziert, dass die diversen
-kleinen Projektteams für ihre Microservices einschließlich der UI verantwortlich sind.
-
-Neben der angesprochenen Verteilung der Verantwortung sind aber auch grundlegende Prinzipien der _Human-Computer-Interaction (HCI)_ und ein _Corpora
-te Design (CD)_ zu realisieren. Wie ein derartiges, einheitliches Look & Feel erreicht werden kann, beschreibt das vorliegende Konzept. Neben der
-Umsetzung nicht-funktionaler Anforderungen, welche im Folgenden dokumentiert werden, gilt es ebenso informelle Beschreibungen des Verhaltens der
-Microservices zu beachten. Letzteres muss wiederum durch neue Mechanismen im sozialen System sichergestellt und implementiert werden.
+Next to the challenge of the distribution of responsibility, also the basic principles of *Human-Computer-Interaction* (HCI) have to be considered and implemented. Furthermore, the use case of a coherent organization like Viva con Agua forces to consider a *Corporate Design* (CD)
+Besides non-functional requirements, the microservices have to follow informal behaviors as described in this concept. Moreover, new social procedures and protocols have to ensure the alignment of the microservice implementations to the sketched concept.
 
 ## Solution
-Der Pool<sup>2</sup> wird als _Rich-Internet-Application (RIA)_ entworfen. Neben der Verwendung im Browser soll auch eine mobile Nutzung möglich sein. Im ersten
-Schritt wird dabei angenommen, dass Web-Apps als mobile Clients implementiert werden. Die Menge an möglichen Client-Technologien lässt sich somit
-auf HTML, CSS und JavaScript einschränken.
+The Heureka! architecture is implemented as _Rich-Internet-Application (RIA)_ to address the requirements of the *Pool<sup>2</sup>*. It will be possible to use the system on the desktop, but also on a mobile device in the browser.
+Thus, client technologies are limited to HTML, CSS and JavaScript.
 
-Die hier skizzierte Lösung basiert daher auf zwei Säulen:
-* Geteiltes CSS
+The sketched solution bases on two columns:
+* Shared CSS
 * Widgets
 
-Die erste Säule (Geteiltes CSS) erlaubt die gemeinsame Nutzung von Design-Elementen und Layout-Beschreibungen. Somit wird ein gemeinsames CD
-ermöglicht. Nachdem die vorherige Säule die Nutzung eines globalen User Interfaces erlaubt, dienen Widgets der gemeinsamen Nutzung von UI-Elementen 
-durch verschiedene Services. Beispielsweise werden mehrere Services die Auswahl von Nutzern mittels des UI ermöglichen. Neben
-Herausforderungen hinsichtlich der Wartbarkeit, könnte auch ein CD und die Konsistenz der Nutzerführung nach den gängigen Prinzipien der HCI nicht
-sichergestellt werden, wenn jeder Service eigene UI-Elemente für diesen Zweck bereitstellen würde. Da Nutzer vom Drops Microservice verwaltet werden,
-soll dieser auch UI-Elemente zur Verwendung der Nutzer bereitstellen. Nach diesem Prinzip entwickelt, folgt die Architektur auch bezüglich der UI-Elemente 
-den Prinzipien _Loosely coupling_ und _High Cohesion_, welche für Microservice-Architekturen grundlegend sind. Allgemeine, globale Elemente,
-wie etwa Navigation oder, zentraler statischer Inhalt (wie bspw. ein Impressum oder ein Header inkl. Logo) können ebenfalls als Widgets für alle Inhalte
-der RIA bereitgestellt werden.
+The shared CSS allows to jointly use design elements and layout descriptions. Therefore, it enables a common CD.
 
-### Geteiltes CSS
-Globales CSS ist im Sinne einer Trennung der Domain nach Bounded Contexts allen Kontexten übergeordnet. Daher ist die Verantwortung für das CSS
-nicht einem der Microservices zuzuordnen, die funktionale Anforderungen abbilden, sondern separat zu betrachten. CSS wird somit durch den speziellen
-Microservice Dispenser implementiert, welcher diese nicht-funktionale Anforderung abbildet.
+Widgets support the reuse of UI elements by various services. So, many services will need to select users using the UI. Users are managed by the microservice *Drops* and thus, also the UI elements handling users should be implemented by *Drops*. Next to maintainance issues, also a CD and the consistence of user experiences will be supported by the concept of widgets.
+Furthermore, the architecture considering widgets directly support the concepts of *loosely coupling* and *high cohesion* regarding the UI.
 
-Das CSS selbst folgt gängigen Richtlinien zur Erstellung modularen CSS ([https://css-tricks.com/css-style-guides/](https://css-tricks.com/css-style-guides/?target=_blank) 
-und [http://cssguidelin.es/](http://cssguidelin.es/?target=_blank)), fungiert als Pattern Library und wird mithilfe von LESS ([http://lesscss.org/](http://lesscss.org/?target=_blank)) entwickelt, 
-um Wartbarkeit und Weiterentwicklung zukunftssicher zu gestalten.
+General and global elements, like the navigation or central, static content (impress or header) can become implemented as widgets. 
+
+### Shared CSS
+Global CSS is implemented and delivered by the microservice *Dispenser* that mainly focusses non-functional requirements. Thus, the CSS can be integrated by other microservices by just adding the reference to the global CSS file.
+
+The CSS follows the guidelines regarding modular CSS ([https://css-tricks.com/css-style-guides/](https://css-tricks.com/css-style-guides/?target=_blank) 
+and [http://cssguidelin.es/](http://cssguidelin.es/?target=_blank)), works as a pattern library and is implemented in LESS ([http://lesscss.org/](http://lesscss.org/?target=_blank)) to support maintainance and further development.
 
 ### Widgets
-Die Microservices sind mittels Widgets in der Lage einzelne Funktionen inklusive eines UI bereitzustellen, so dass diese durc h andere Microservices
-ausgegeben werden können. Ein Widget soll mittels eines URI integriert werden können. Dabei orientiert sich das Konzept der Widgets grundlegend an
-der Idee von Transclusions. Die bereitstellenden Microservices dienen dabei als Quelle auf welche die URI zeigt. Auf eine GET Anfrage des Widgets
-mittels des URI liefert der Microservice ein UI-Element zurück, welches dabei jedoch nicht allein statisch ausgegeben werden, sondern auch über
-dynamisches Verhalten verfügen kann. Neben dem Standardverhalten von HTML-Elementen können auch JavaScript basierte Erweiterungen
-vorgenommen werden oder vollkommen eigenständige Alternativelemente via JavaScript definiert werden. Hinsichtlich der optischen Präsentation werden
-Widgets über das geteilte CSS, Style Tags (scoped) innerhalb des Widget Markups oder das Style-Attribut an den jeweiligen Markup Elementen gestaltet.
+The microservices can use widgets to provide functions including the user interface. Thus, other microservices are able to integrate these functions with only a minimal effort.
+Widgets can be integrated just by using a URI specific to the widget. The concept follows the idea of *transclusions*. The providing microservices are the source for the URIs and by a `GET` call, the user interface element is delivered.
+These user interface elements are not just static content, but implement dynamic behavior.
 
-Der Aufruf eines Widgets mittels HTTP GET Request liefert immer HTML Code innerhalb eines Root-Tags zurück. Dabei kann der HTML Code eigene(n)
-CSS oder JavaScript Code enthalten und der Root-Tag frei gewählt werden, muss aber mittels einer ID ausgezeichnet werden, welche das Widget
-eindeutig identifiziert. Da Widgets gegebenfalls parametrisiert werden müssen (etwa um kontextsensitive Platzhalter für Formular-Elemente zu erlauben),
-soll die URI die Übergabe von Variablenwerten nach den Kriterien eines RESTful Webservices erlauben.
+Next to the standard behavior of HTML elements, also JavaScript implementations can be used. The styling can become implemented by using the global CSS as well as styled (scoped) tags specific to the widget.
 
-Des Weiteren können Widgets Seiteneffekte haben. Diese beschreiben Reaktionen des Widgets auf konkrete Ereignisse. So kann etwa die Selektion einer
-Crew in einem Widget A die Auswahl von Nutzern in einem anderen Widget B einschränken. Ereignisse werden über die einbindende Seite mittels
-JavaScript Events ausgetauscht. Dabei kann ein solcher Event sowohl von der Seite selbst, als auch von einem eingebundenen Widget ausgelöst werden.
+The delivered widget always implements HTML code extended by CSS and JavaScript. Since widgets will often require some parameterization and may have return values or side effects, take a look at the [How-To of implementing widgets](../../how-to/widgets).
 
-Zu jedem Widget muss zusätzlich eine Dokumentation geliefert werden, die mögliche Parametrisierungen, das Verhalten und Seiteneffekte (also die
-Events auf die reagiert wird) beschreibt. Im Sinne des dezentralen und loosely coupled Organisationsprinzips des Projekts ist definiert, dass Widgets mit
-Hilfe semantischer Versionierung ([http://semver.org/](http://semver.org/?target=_blank)) stets abwärtskompatibel deployed werden. Dies bedeutet, dass die Versionsnummer innerhalb der
-URI des Widgets spezifiziert werden können muss.
+Furthermore, every widget requires a documentation describing the parameterization, the behavior, possible return values and side effects.
+Supporting the decentral and loosely coupled management of the project, widgets have to be deployed using semantic versioning ([http://semver.org/](http://semver.org/?target=_blank)).
