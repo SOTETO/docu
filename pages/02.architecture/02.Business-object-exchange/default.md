@@ -33,21 +33,13 @@ The guideline defines rules for the change of pushed and pulled MOs. The followi
 | Attributes of a pulled MO must be changed | A collaboration process with the developers of all receiving microservices has to be initiated. If the change is accepted by the developers of multiple receiving microservices, a new requirement for the providing microservice has to be formulated and a new version should be released. If the change is only required by the originally initiating microservice, a solution has to be implemented in this microservice. | Conflicts with pulled MOs have to be avoided. Thus, the software developers should be responsible by themselves regarding the robustness of their system. This becomes possible by the versioning of data formats. |
 | Attributes of a pulled MO are not required anymore | See previous solution (Attributes of a pulled MO have to be changed) | See reasoning before (Attributes of a pulled MO have to be changed) |
 
-## Lebenszyklen - Object Event System
-Verändern sich die gehaltenen Daten in Microservices, müssen andere Microservices gegebenenfalls darauf reagieren können. Beispielsweise werden in
-Waves zu jeder Aktion verantwortliche Supporter assoziiert. Löscht oder deaktiviert ein solcher Supporter nun aber den eigenen Account, ist es sinnvoll,
-wenn Waves dies registrieren kann, den Nutzer aus der Assoziation entfernt und eventuell andere Nutzer über diesen Vorgang informiert.
+## Life cycles - Object event system
+If the provided data of a microservice is changed, other services may have to react. For example, users are often associated to other data objects. If a user deletes or deactivates his / her account, it is required for other microservices to detect this change and to delete the corresponding association.
 
-Damit ein Microservice die Anderen über Veränderungen seines Datenbestands informieren kann, führen wir eine zusätzliche Kommunikationsebene ein.
-Dieses Kommunikationssystem zwischen den Microservice wird *Object Event System (OES)* genannt und basiert auf dem bestehenden
-Kommunikationsnetzwerk zwischen den Microservices. Das OES implementiert einen Nachrichtenaustausch nach dem PUSH-Prinzip. Das bedeutet, dass
-ein Microservice nach einer Änderung an einem VO allen anderen Microservices, die mit ihm bzgl. *Object Exchange* verbunden sind, eine Nachricht
-schickt. Diese Nachricht umfasst dabei die Information wann welches Objekt verändert wurde und welche Art der Veränderung vorgenommen wurde
-(löschen oder ändern). Beziehende Microservices können anschließend das Objekt neu beziehen (bei Veränderung) oder alle Referenzierungen auf das
-Objekt entfernen. Auch hier wird die Verantwortung den Entwicklern des jeweiligen Microservices überlassen, um eine möglichst freie Gestaltung des
-Umgangs mit derartigen Ereignissen zu erlauben.
+Thus the *Object Event System (OES)* ist introduced as ab additional communication layer. A modern message broker ist used to push updates of data to other services that have subscribed for these data. 
+Messages describe the data of change as well as the operation (`delete` or `update`). Afterwards, receiving microservices can request the data object again, to update all references or delete these references.
 
-Die Nachrichten haben daher folgendes Format:
+The messages have the following format:
 ```
 {
   "sender": "microservice-uuid",
@@ -58,15 +50,8 @@ Die Nachrichten haben daher folgendes Format:
 }
 ```
 
-Während das Attribut `sender` den Microservice identifiziert, der das jeweilige Objekt hält, beschreibt `action` die verändernde Operation. `action` kann
-dabei drei verschiedene Werte annehmen: `delete`, `update`, `deactivated` oder `activated`. Im Unterschied zu `deactivated` beschreibt `delete` die
-vollständige Entfernung des Objekts aus dem Datenbestand. Es kann somit nie wieder abgerufen werden. `deactivated` hingegen ist ein Objekt dann,
-wenn es noch in der Datenbank gehalten wird, aber nicht mehr aktiv verwendet werden soll. Beispielsweise könnte ein Supporter `deactivated` sein,
-nachdem der Nutzer seinen Account gelöscht hat. Dies hat den Vorteil, dass der Supporter im Kontext vergangener Interaktion noch repräsentiert werden
-kann (etwa als verantwortlicher Ansprechpartner zu einer Aktion). Die `action` `activated` kann verwendet werden, um deaktivierte Objekte zu
-reaktivieren. Das Attribut object identifiziert das betroffene Objekt eindeutig mittels einer `UUID`. `type` unterstützt die Kontextualisierung des Objekts und
-beschreibt den Typ (die Klasse) des Objekts. Der mitgelieferte `timestamp` gibt Auskunft darüber, wann die Operation ausgeführt wurde und wird als Unix
-Timestamp (fortlaufender ganzzahliger Wert) abgebildet.
+While the attribut `sender` identifies the providing microservice, `action`  describes the altering operation. `action` can have four different values: `delete`, `update`, `deactivated` or `activated`. In difference to `deactivated`, `delete` describes the complete deletion of the object. Thus, it will not be possible to request the data object again. `deactivated` means that the object is still saved in the database, but not actively used anymore. The `action` `activated` can be used to reactivate deactivated objects. 
+The attribute `object` identifies the addressed object using an `UUID`. `type` supports the contextualization of the object and describes the type. The unix `timestamp` marks the time the operation has been executed.
 
 Neben Herausforderungen hinsichtlich der [Authentifizierung unter den Microservices](../action-based-user-rep), ist für die Realisierung von RESTful Webservices keine
 Registrierung des Beziehenden MS beim Haltenden MS notwendig. Daher ist es dem Haltenden MS nicht möglich den Beziehenden MS zu bestimmen und
