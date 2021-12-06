@@ -4,7 +4,7 @@ slug: oauth2-handshake
 ---
 # OAuth2 Handshake
 Setting up the OAuth2 handshake requires two steps:
-(1) You need to register your microservice as an OAuth2 client in _Drops_. To do so, you have to contact the administrator of the Pool<sup>2</sup> and please her / him to add your microservice to the _Drops_ database. If you setup a development system, you are the administrator by yourself. In that case consider the description below.
+(1) You need to register your microservice as an OAuth2 client in _Drops_. To do so, you have to contact the administrator of the Heureka! architecture and please her / him to add your microservice to the _Drops_ database. If you setup a development system, you are the administrator by yourself. In that case consider the description below.
 (2) You have to implement your part of the handshake.
 
 The OAuth handshake implements only the **exchange of user data**. It does **not** implements a users session for your microservice. Thus, after implementing the OAuth handshake, you will have access to the user data and you can **use the libraries you know** to implement a **session for the user and your microservice**.
@@ -23,7 +23,7 @@ Considering the [discussion about the number of systems for one microservices](.
 
 !!! The `Secret` should be known only to _Drops_ and the new microservice. Thus, I would recommend to generate a key using [KeePass](https://keepass.info/?target=_blank) enter it into the form, save it in a KeePass database, and enter it to the microservices deployment configuration. 
 
-!!! The `Redirect URL` will be defined by the microservice developer and should be given the Pool<sup>2</sup> administrator. The given URL identifies the endpoint that is used by _Drops_ to redirect the users client back, if the authorization code has been successfully created. 
+!!! The `Redirect URL` will be defined by the microservice developer and should be given the Heureka! architectures administrator. The given URL identifies the endpoint that is used by _Drops_ to redirect the users client back, if the authorization code has been successfully created. 
 
 !!! The chosen `Grant types` define the possible authorization workflows possible between _Drops_ and the microservice. Currently, _Drops_ allows only `authorization code`.
 
