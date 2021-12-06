@@ -4,82 +4,54 @@ title: Architecture
 # Microservices as CSCW components
 
 ## Case Study: Pool<sup>2</sup> of Viva con Agua de St. Pauli e.V.
-Jeder Supporter kommt irgendwann am Pool von VcA nicht mehr vorbei. Das Tool ist zu einem zentralen Bestandteil unseres Netzwerks geworden. Ob
-nun das nächste Festival mit sinnstiftender Aktivität füllen, die gesammelten Spenden dokumentieren oder einfach informiert bleiben - all dies läuft
-mittlerweile über den Pool und so erlaubt das System das dezentrale Wachstum von VcA. Während Funktionen, wie etwa Email-Newsletter der Crews,
-unser Zusammenwirken vereinfachen und teilweise sogar erst ermöglicht haben, versuchen wir den Pool so zu gestalten, dass dieser unseren
-Bedürfnissen entspricht. Unser soziales Miteinander prägt also den Pool und gleichzeitig hat der Pool Auswirkungen auf dieses Miteinander.
+Viva con Agua de St. Pauli e.V. ([https://www.vivaconagua.org/](https://www.vivaconagua.org/en/)) is a German non-governmental organization that aims to collect donations and raise awareness for *Water, Sanitation and Hygine* projects worldwide. Viva con Agua can be classified as an evolutionary-teal organization (Laloux 2014) and thus, it consists of about 50 *crews* (regional, decentralized and loosely coupled groups) of volunteers in Germany, Austria and Swiss.
 
-Viva con Agua ist erfolgreich, weil sehr viele Menschen mit Spaß und Kreativität aktiv werden können. Wir erhalten unsere Motivation, indem wir immer
-wieder Neues probieren, aber uns dabei nicht selbst übernehmen. Denn der stetig zunehmende Erfolg von VcA basiert nicht auf dem Wachstum einzelner
-Aktionen, sondern auf der größer werdenden Anzahl unterschiedlicher Aktionen. Die dezentrale Organisation, welche der Pool erlaubt, ist somit auch
-Garant für den Erfolg von VcA.
+In 2011 the increased number of volunteers required a technical support tool and the organization implemented the first version of the *Pool*.
+Managing the different activities of the organization, but also communication and handling of finances become core functionalities of the *Pool*.
+Thus, the social system shapes the functions and also is shaped by the functions of the *Pool*.
 
-Gleichzeitig ist die dezentrale Struktur auch eine große Herausforderung für die Weiterentwicklung des Pools (also die Anpassung des Pools an unser
-soziales System). Denn wie sollen die vielen verschiedenen Entwicklungen in den Crews, die teilweise auch im Konflikt miteinander stehen, in einem
-technischen Tool zusammenfließen? Eine Crew braucht dringend einen Chat, um schnell Informationen weiterzugeben, die nächste Crew hätte gerne
-Abstimmungshilfen, um wirklich faire Entscheidungen zu treffen, verzichtet aber explizit auf Chats, damit das Persönliche zwischen den Supportern nicht
-zu kurz kommt. Die Umsetzung solcher verschiedenen Anforderungen ist nicht alleine komplex, sondern erfordert auch ein gut koordiniertes, größeres
-Team an Entwicklern. Für eine gemeinnützige Organisation ist der damit verbundene finanzielle Aufwand nicht zu bewältigen.
+Viva con Agua is successful, because many people participate with joy and creativity. It is not about having larger, but more and outstanding events. Thus, the decentralization of the organization guarantees the success of Viva con Agua and is directly supported by the *Pool*.
+
+At the same time, the decentralization becomes a challenge for the further development of the *Pool* and its adjustment to the changes of the social system. How to bring the different developments of various crews and their required technical support into one tool?
+So, for example, one crew needs a chat, while the next crew explicitly refuse to use a chat to ensure the human contacts between the supporters.
+
+Implementing such different requirements is complex and needs a well coordinated bigger team of software developers. Many organizations, as the non-governmental Viva con Agua, are not able to maintain the required software development projects.
 
 ## IT project culture
-Wir haben uns vorgenommen den Spirit von VcA ins IT-Umfeld zu übertragen. Das bedeutet, Beteiligte sollen intrinsisch motiviert sein sowie Spaß und
-Freude an der Realisierung des Projekts haben. Außerdem ist der Pool<sup>2</sup> eine Komposition kleiner, dezentral organisierter und möglichst unabhängiger
-Projekte.
+Thus, the Heureka! architecture allows to move the social concept of Viva con Agua to IT projects. Developers should become intrinsically motivated and should have fun in realizing the project.
+The new version of the *Pool* bases on the Heureka! architecture and is named Pool<sup>2</sup>. Thus, it is a composition of several small, decentrally organized and loosely coupled software artefacts.
 
-Damit diese Kultur gelebt werden kann, haben wir diverse Herausforderungen bewältigt oder müssen dies noch schaffen: Zunächst müssen Menschen
-gefunden werden, die an einer kontinuierlichen technischen Weiterentwicklung in Symbiose mit dem sozialen System interessiert sind. Dabei können
-ähnlichen Strukturen wie in Open Source Communities entstehen, studentische Arbeiten integriert werden oder Organisationen im Sinne des All-Profit
-Gedanken einen Beitrag leisten. Zudem muss die Unabhängigkeit der Beteiligten ermöglicht werden. Es gilt also die notwendige Einarbeitung gering zu
-halten und die Unabhängigkeit von Technologien weitestgehend zu gewährleisten. Auch die Schnittstellen zur Koordination zwischen den Teams sollten
-frei gestaltet werden können, so dass verschiedene Projektmanagement-Stile unterstützt werden.
+Software developers involved in the project are aligned to the symbiotical relation between social and technical system. Thus, structures similar to open source communities may evolve, but also student works and support of other organizations may implement some change.
+Furthermore, the loosely coupling between the participants has to be ensured. Therefore, it should require only less effort to learn about the *Pool²* and the Heureka! achitecture. Additionally, the independence of technologies should be assured.
 
 ## Microservice architecture
-Die zuvor beschriebene Herausforderungen möchten wir ganzheitlich und in Zusammenhang betrachten. Daher sollte die Entscheidung über eine
-Architektur nicht alleine die funktionalen Anforderungen an den Pool<sup>2</sup> beachten, sondern auch Trennung der Projektteams hinsichtlich Technologie und
-Koordination gewährleisten. Neben klassischen monolithischen Architekturen, betrachten wir daher auch stark in Komponenten separierte Varianten und
-die Auswirkungen der jeweiligen Architekturen auf die Projektkultur.
+The previously mentioned challenges will be addressed by a loosely coupled architecture. Nowadays, microservices are typically used (Newman, 2015). A microservice is a stand alone application running in one process and implements a strong cohesion regarding a _bounded context_. Furthermore, such a service constantly communicates with other services using leightweight technologies, like RESTful webservices. 
+A set of such microservices is named a microservice architecture (Newman, 2015; Dragoni et al., 2017).
 
-Eine moderne Form einer losen Architektur basiert auf Microservices (Newman, 2015). Ein Microservice ist dabei eine eigenständige Anwendung, welche
-in einem eigenen Prozess läuft und eine starke Kohäsion bzgl. eines _Bounded Context_ aufweist. Zudem steht ein solcher Service dauerhaft in Verbindung
-mit anderen Microservices und verwendet dabei eine leichtgewichtige Kommunikation, wie etwa RESTful webservices. Eine Menge solcher Microservices
-wird Microservice Architektur genannt (Newman, 2015; Dragoni et al., 2017).
-
-Da Microservices weitgehend unabhängig voneinander agieren, ist eine freie Wahl der Technologie für jeden einzelnen Service gegeben (mit den
-Einschränkungen, die nachfolgend im Abschnitt [Konzepte](#concepts) aufgeführt werden. Auch koordinative Abhängigkeiten sind stark eingeschränkt und so bietet eine
-derartige Architektur die Möglichkeit die zuvor beschriebene Projektkultur zu etablieren.
+Since microservices are loosely coupled to each other, a free choice of technology is possible, considering the constraints of section [concepts](#concepts).
+Also coordinative dependencies are restricted and thus, the architecture allows to integrate many different and not or loosely coupled software developers.
 
 ![The microservice architecture of the Pool2](image://Pool2-ms.png?resize=600,300&classes=float-left)
 
-Die funktionalen Anforderungen an den Pool<sup>2</sup> werden im ersten Schritt durch den Funktionsumfang des ersten Pool definiert. Abbildung 1 zeigt die
-Projektion der Funktionen des Pool auf Microservices des Pool<sup>2</sup>. Drops ist für die Nutzerverwaltung verantwortlich, während Stream die Finanzen und
-Waves die Aktionen hält. Bloob dient der Kommunikation. Diese Services bilden alleine die offensichtlichen funktionalen Anforderungen ab. [Konzepte](#concepts) führt 
-weitere, zumeist nicht-funktionale Anforderungen sowie die weiteren Microservices ein, die diese Anforderungen realisieren. Zudem sind andere nichtfunktionale 
-Anforderungen abzubilden. So benötigt etwa jedes Kollaborationstool ein Awareness-System, welches die Nutzer übereinander informiert (etwa durch Notifications).
+Figure 1 sketches the functional requirements of the *Pool<sup>2</sup>* projected to a microservice architecture. Drops handles the user profiles, while stream holds the finances and waves the activities and events. Bloob implements communication functions.
 
-Eine Microservice Architektur impliziert diverse Herausforderungen, die in monolithischen Architekturen nicht auftreten würden. Das Pool<sup>2</sup> Projekt in
-Zusammenarbeit mit der [Humboldt-Universität zu Berlin](https://soteto.net?target=_blank) dient der Vorbereitung einer Microservice Architektur und von Konzepten, mit deren Hilfe die
-Herausforderungen angegangen werden können. Wie etwa kann eine _[Shared Session](shared-session)_ zwischen den Microservices hergestellt werden, so dass die
-Supporter sich nicht in jedem Microservice einzeln authentifizieren müssen? [Wie genau sieht die Kommunikation der Microservices aus?](oes) [Wie lässt sich
-diese absichern?](intraMicroservice) Wie kann sichergestellt werden, dass die verschiedenen Services, die auch von verschiedenen Kooperationspartnern erstellt werden
-einem [einheitlichen Corporate Design (CD) folgen, ohne das dabei doppelter Code entsteht](dUIfc) und die Wartbarkeit des System erschwert wird? Diese und
-weitere Fragen sollen im Abschnitt [Konzepte](#concepts) diskutiert werden.
+[Concepts](#concepts) describes the non-functional requirements as well as some of the microservices implementing these needs.
+Furthermore, some non-functional requirements are still open, like an Awareness component.
+
+A microservice architecture implicits some challenges not occuring in classic monolithical architectures, like implementing a _[Shared Session](../architecture/shared-session)_ between the microservices. How to implement the [communication between microservices](../architecture/oes)? How to ensure the usage of a [common corporate Design (CD) without implementing duplicate code](../architecture/dUIfc)?
 
 ## Concepts
-
-Nachfolgend werden grundlegende Konzepte aufgeführt, die eine Implementierung der zuvor beschriebenen, angestrebten Lösung auf technischer Ebene
-erlauben. Die Liste von Konzepten wird dabei kontinuierlich erweitert und dient einer ersten Orientierung, wenn ein neuer Microservice entwickelt werden
-soll.
+Several challenges have to be considered for implementing a microservice architecture. This section draws an overview about the basic concepts addressing the technical challenges. The list is a first orientation for implementing a microservice.
 
 | Name | Beschreibung | Status |
 | ---- | ------------ | ------ |
-| [Dynamic UI Fragment Composition](dUIfc) | In einer dezentralen Microservice Architektur ist die Implementierung der Nutzeroberfläche eine Herausforderung. Da ein zentraler Service starke Abhängigkeiten aller anderen Services zu diesem einen Service erzeugt, ist dies für die angestrebte Projektkultur *keine* Lösung. Somit muss jeder Service seine eigene Nutzeroberfläche implementieren können, dabei ist aber ein Corporate Design (CD) zu beachten und Code Duplizierung zu vermeiden. Das vorliegende Konzept beschreibt, wie diese Ziele erreicht werden können. | VERWENDET |
-| [Business Object Exchange](oes) | Ein Microservice übernimmt die Verantwortung für (mehrere) Business Objects (BO). Diese müssen gegebenenfalls an andere Microservices weitergegeben werden, da diese zusätzliche Informationen zur Durchführung der bereitgestellten Operationen benötigen. Das vorliegende Konzept beschreibt den Austausch der BOs basierend auf RESTful webservices. | VERWENDET |
-| [Shared Session](shared-session) | Innerhalb vieler Microservices werden Nutzer identifiziert werden müssen. Damit nicht jeder Microservice eine eigenen Authentifizierung implementieren muss und damit die Wartbarkeit des Gesamtsystem erschwert und außerdem den Nutzern kein eigener Login für jeden Microservice zugemutet wird, soll eine Shared Session implementiert werden. Das vorliegende Konzept beschreibt die Shared Session basierend auf einem OAuth2 Handshake zwischen den Microservices, so dass nur ein Service eine tatsächliche Session mit dem Nutzer halten muss. | VERWENDET |
-| [Action-based extension of user representation](action-based-user-rep) | Dem Prinzip der _Open Participation_ bei VcA gerecht werdend, sollen Nutzer im Rahmen der Registrierung so wenig Informationen wie nötig angeben müssen. Einige Aktivitäten im Pool² erfordert jedoch mehr Wissen über den Nutzer. So wird etwa bei der Anmeldung für ein Festival die Handynummer und das Geburtsdatum benötigt. Die angestrebte Microservice Architektur soll es ermöglichen dynamisch neue Funktionen dem Pool² hinzuzufügen. Somit kann der Pool<sup>2</sup> zur Laufzeit um Funktionen erweitert werden die mehr Informationen über den authentifizierten Nutzer erfordern, als dieser bisher angegeben hat. Diesem Problem begegnet das vorliegende Konzept mit einer dynamischen Erweiterung der Stammdaten des Nutzers immer zu genau dem Zeitpunkt, zu dem der Nutzer eine Funktion nutzen möchte. Dabei wird der Datensatz stets nur um die fehlenden Informationen erweitert. | DRAFT |
+| [Dynamic UI Fragment Composition](../architecture/dUIfc) | In a decentralized microservice architecture the implementation of a user interface becomes a challenge. Since a central service implements strong dependencies to other microservices, such an implementation is **no** solution for the required loosely coupling. Thus, every service has to implement an own user interface, considering a corporate design and should avoid code duplication. The present concept describes how these aims can be reached. | IN USE |
+| [Business Object Exchange](../architecture/oes) | One microservice is responsible for (multiple) business objects (BO). These BO may have to be transfered to other microservices, to use the described information for other requirements. The present concept describes the BO exchange using RESTful webservices. | IN USE |
+| [Shared Session](../architecture/shared-session) | Microservices need to identify users. Avoidung the implementation of authentification functions per microservice, the present concept explains the implementation of a shared session using a OAuth2 handshake. | IN USE |
 
 ## References
 |     |      |
-| --- | ---- |
-| (Newman, 2015) | S. Newman, Building Microservices, 1st ed. O’Reilly Media, 2015. |
+| --- | --- |
 | (Dragoni et al., 2017) | N. Dragoni et al., “Microservices: yesterday, today, and tomorrow.” Cornell University, 2017. |
+| (Laloux 2014) | F. Laloux, Reinventing Organizations, 1st ed. Brussels: Nelson Parker, 2014. |
+| (Newman, 2015) | S. Newman, Building Microservices, 1st ed. O’Reilly Media, 2015. |

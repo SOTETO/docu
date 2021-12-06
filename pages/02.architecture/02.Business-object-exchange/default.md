@@ -3,82 +3,43 @@ title: Business Object Exchange
 slug: oes
 ---
 # Business Object Exchange
-Ein Microservice übernimmt die Verantwortung für (mehrere) verwaltete Objekte (VO). Diese müssen gegebenenfalls an andere Microservices
-weitergegeben werden, da die Services zusätzliche Informationen zur Durchführung der bereitgestellten Operationen benötigen. Das vorliegende Konzept
-beschreibt den Austausch der VOs basierend auf RESTful Webservices, welche häufig in Microservice Architekturen verwendet werden (Dragoni et al.,
-2017). REST bildet die HTTP Verben auf Basisoperationen des CRUD-Prinzips (Create, Read, Update and Delete) ab. Somit wird für die Erstellung von
-Instanzen einer Entität POST verwendet, für das Abrufen GET, die Aktualisierung ist durch PUT gekennzeichnet (ebenso die gleichzeitige Erstellung
-mehrerer Instanzen) und der Löschvorgang wird mittels DELETE eingeleitet (Rodriguez, 2008).
+One microservice is responsible for (multiple) managed data objects (MO) that have to be transmitted to other microservices.
+This concept describes the exchange of MOs that bases on RESTful webservices as mainly implemented by microservice architectures (Dragoni et al. 2017). 
 
-RESTful Webservices werden durch wenige Haupteigenschaften charakterisiert. Erstens sind sie zustandslos: Requests enthalten alle nötigen
-Informationen, um die Anfrage zu beantworten und Responses können Links auf andere Ressourcen beschreiben. Zudem können die Responses auf eine
-Anfrage gecached werden. Zweitens nutzen Webservices URIs mit dem Aufbau einer Verzeichnisstruktur: Eine Hierarchie von (Sub)Pfaden erweitert
-einen primären Wurzelknoten und Query Strings sollten vermieden werden. Außerdem werden die Daten in einem vom Menschen lesbaren Format
-beschrieben, wie etwa XML, JSON oder beides parallel (Rodriguez, 2008).
+REST uses the HTTP verbs for the basis operations of the CRUD principle (`Create`, `Read`, `Update` and `Delete`). Thus, the creation of instances uses `POST`, while `GET` is used to call for instances and an update uses `PUT` (as well as the parallel creation of multiple instances). Delete uses the descriptive verb `DELETE` (Rodriguez, 2008).
 
-Um die lose Struktur innerhalb von VcA zu berücksichtigen, sollte auf dieser Kommunikationsebene Choreography anstelle von Orchestration als Form der
-Organisation eingesetzt werden (Nikaj and Weske, 2016; Nikaj et al., 2016). Auf diese Weise benötigt die Kommunikation zwischen zwei Services auch
-nur die beiden Services und einen Kommunikationskanal zwischen diesen. Somit kann ein Netzwerk von Microservices entstehen, in dem die einzelnen
-Services nur abhängig von den Services sind, mit denen sie auch kommunizieren müssen.
+RESTful Webservices are stateless: Requests contain all required information to answer the request and responses can describe links to other resources. Furthermore, responses can be cached.
+Additionally, webservices are using URIs following a directory structure: A hierarchy of (sub) pathes is extending a root node and query strings should be avoided. Moreover, the data should by human readable, using formats like XML, JSON or both in parallel (Rodriguez, 2008).
 
-Beispielsweise: Der Microservice Waves erlaubt die Verwaltung von Aktionen. Um eine Aktion anzulegen muss ein Ansprechpartner (ASP) hinterlegt
-werden können. Ansprechpartner ist in diesem Kontext eine Rolle, die ein Nutzer im System einnehmen kann. Nutzer werden jedoch im Drops-System
-verwaltet und persistiert. Waves kann die durch die Nutzer repräsentierten Supporter für diesen Zweck von Drops abfragen und nutzt dafür RESTful
-Webservices.
+Considering the expected loosely coupling of the Heureka! architecture, the communication between microservices should follow the concept of choreography, instead of orchestration (Nikaj and Weske, 2016; Nikaj et al., 2016). Thus, the communication between two services requires only a direct communication channel between both. Therefore, a network of microservices results and there are only dependencies between the directly communicating nodes.
 
-## Selektion der Daten
-Eine Herausforderung für den Entwickler eines Microservices besteht darin zu entscheiden welche Daten für die Übertragung bereitgestellt werden sollen.
-Dafür lassen sich die VOs anhand der Grafik aus Abbildung 2 klassifizieren. Grundsätzlich sind die VOs in zwei Kategorien zu trennen: Erstens gibt es die
-Eigenen VO, also VO die durch den Microservice selbst gehalten und verwaltet werden und zweitens die Pulled VO, also VOs die von anderen
-Microservices bezogen werden. Hier interessiert uns nur die erste Kategorie. Diese lässt sich ebenfalls in die Kategorien Pushed VOund Interne VO aufteil
-en. Während die Pushed VO eben genau die VOs umfasst, die an andere Microservices weitergegeben werden sollen, dienen Interne VO alleine der
-Verarbeitung durch den vorliegenden Microservice und werden nicht weitergegeben.
+## Selection of data
+It is a challenge for software developers of microservices to decide which data should be provided in RESTful webservices.
+Thus, MOs are categorized: (1) Own MOs that are saved and managed by the microservice itself and (2) pulled MOs that have been received from other microservices.
+Only the first category is relevant, that can be splitted in (1.1) pushed MOs and (1.2) internal MOs.
+Only the type (1.1) of the pushed MOs are relevant for other microservices. 
 
-Als Beispiel soll an dieser Stelle der Nutzer des Systems dienen. Die Verwaltung der Nutzer obliegt dem Drops Microservice. Der Nutzer selbst wird keinen
-anderen Services bereitgestellt und ist daher kein Pushed VO, sondern ein Eigenes VO von Drops. Der durch den Nutzer repräsentierte Supporter ist
-hingegen ein Pushed VO. Inwiefern unterscheiden sich Supporter und Nutzer des Systems? Ein Nutzer umfasst stets einen Supporter, bildet aber
-zusätzlich die Möglichkeit zur Authentifizierung mittels eines zusätzlichen Passworts. Zur Identifikation des Nutzers wird die Email-Adresse verwendet, die
-auch den Supporter eindeutig identifiziert. Somit ist der Supporter ein Pushed VO, während der Nutzer gar ein Eigener VO ist (Authentifizierung der Nutzer
-innerhalb des Pool<sup>2</sup> wird mittels des [Shared Session](../shared-session) Konzepts realisiert). Ob der Supporter als Pushed VO oder Interne VO vom Drops-Entwickler
-betrachtet werden sollte hängt davon ab, ob der Supporter auch für andere Microservices relevant sein könnte. Da dies im Fall des Supporters gegeben
-ist, handelt es sich bei einem Supporter um ein Pushed VO.
+In some special cases, additional information for pulled MOs are created and managed. If these information should become pushed by a RESTful webservice can be decided by the escalation guideline: A MO has to be always complete in the network. Thus, data extensions are handled only as internal MOs.
 
-Zu beachten ist der Sonderfall, dass zusätzliche Informationen zu einem Pulled VO in einem Service erzeugt und verarbeitet werden. Es stellt sich
-natürlich die Frage, ob derartige Erweiterungen der VOs auch nach außen transparent zur Verfügung gestellt werden sollen. Hier greift die später
-beschriebene "Eskalationsrichtlinie", nach der ein VO im Netzwerk nur vollständig aus einer Quelle bezogen werden kann. Somit werden solche
-Erweiterungen im einfachen Fall nicht nach außen bereitgestellt und werden somit als Interne VO betrachtet. Diese Überlegung wird in Abbildung 3 visualisiert.
+## Escalation guideline
+The guideline defines rules for the change of pushed and pulled MOs. The following table describes a rule and a reasoning for each case:
 
-## Eskalationsrichtlinie
-Wie bereits im Abschnitt "Selektion der Daten" beschrieben, müssen Regeln für die Veränderung von Pushed VOs (und Pulled VOs) festgesetzt werden.
-Die folgende Tabelle soll für die verschiedenen Fälle das jeweilige Vorgehen und jeweils eine Begründung dazu liefern:
-
-| Fall | Regel | Begründung |
+| Case | Rule | Reasoning |
 | ---- | ----- | ---------- |
-| Ein Pushed VO wird erweitert | Erweiterung kann vorgenommen werden und steht unter einer neuen Versionsnummer zur Verfügung. Vorherige Beschreibung der Daten bleibt unter einer vorherigen Versionsnummer verfügbar. | Konflikte im Umgang mit den empfangenen Daten sollen möglichst vermieden werden. Hierfür ist es sinnvoll den Entwicklern der Microservices selbst die Verantwortung für die Robustheit ihres Systems zu übergeben, was durch die Verfügbarkeit der verschiedenen Versionen der Datenformate ermöglicht wird.|
-| Eigenschaften eines Pushed VO werden verändert (beispielsweise der Typ) | Veränderung kann vorgenommen werden und steht unter einer neuen Versionsnummer zur Verfügung. Vorherige Beschreibung der Daten bleibt unter einer vorherigen Versionsnummer verfügbar. | Konflikte im Umgang mit den empfangenen Daten sollen möglichst vermieden werden. Hierfür ist es sinnvoll den Entwicklern der Microservices selbst die Verantwortung für die Robustheit ihres Systems zu übergeben, was durch die Verfügbarkeit der verschiedenen Versionen der Datenformate ermöglicht wird. |
-| Eigenschaften eines Pushed VO werden entfernt | Entfernung kann vorgenommen werden und steht unter einer neuen Versionsnummer zur Verfügung. Vorherige Beschreibung der Daten bleibt unter einer vorherigen Versionsnummer verfügbar. | Konflikte im Umgang mit den empfangenen Daten sollen möglichst vermieden werden. Hierfür ist es sinnvoll den Entwicklern der Microservices selbst die Verantwortung für die Robustheit ihres Systems zu übergeben, was durch die Verfügbarkeit der verschiedenen Versionen der Datenformate ermöglicht wird. |
-| Ein Pulled VO wird erweitert | Initiierung eines Abstimmungsvorgangs mit anderen Microservice Entwicklern. Wird diese Erweiterung auch durch andere Services benötigt oder abgebildet? Falls ja: Als Anforderung an den haltenden MS. Falls nein: Abbildung als Interne VO im beziehend en MS. | Kommunikation auf technischer Ebene soll möglichst einfach und überschaubar bleiben. Daher sollen VO nicht auf verschiedene Microservices verteilt werden. |
-| Eigenschaften eines Pulled VO müssen verändert werden (beispielsweise der Typ) | Initiierung eines Abstimmungsvorgangs mit anderen Microservice Entwicklern. Wird die Veränderung durch alle Entwickler-Teams befürwortet: Anforderung an den halten den MS. Falls die Veränderung nur durch den beziehenden MS benötigt wird, sollte dort eine Lösung gefunden werden (bspw. Typkonvertierung). Wenn nur ein Teil der Entwickler-Teams die Veränderung befürwortet, muss eine Lösung auf Seiten des halt enden MS gefunden werden, welche alle Varianten über die verschiedenen Versionen hinweg bereitstellt. | Auf diese Weise kann sichergestellt werden, dass jede benötigte Form der VOs bezogen werden kann, ohne dadurch einige Microservices auf den Zugriff auf alte Versionen zu beschränken (und damit von zukünftigen Entwicklungen auszuschließen). |
-| Eigenschaften eines Pulled VO werden nicht benötigt | Siehe Lösung zuvor (Eigenschaften eines Pulled VO müssen verändert werden) | Siehe Begründung zuvor (Eigenschaften eines Pulled VO müssen verändert werden) |
+| Extend a pushed MO | Pushed MOs can be extended by increasing the version number. Furthermore, the old versions have to be still accessible by the old version numbers. | Conflicts with pulled MOs have to be avoided. Thus, the software developers should be responsible by themselves regarding the robustness of their system. This becomes possible by the versioning of data formats. |
+| Attributes of a pushed MO are altered | Changes can become implemened and have to be provided by a new version number. The previous data description has to be accessible by the previous version number. | Conflicts with pulled MOs have to be avoided. Thus, the software developers should be responsible by themselves regarding the robustness of their system. This becomes possible by the versioning of data formats. |
+| Attributes of a pushed MO will be removed | Attributes can be deleted and have to be provided by a new version number. The previous data description has to be accessible by the previous version number. | Conflicts with pulled MOs have to be avoided. Thus, the software developers should be responsible by themselves regarding the robustness of their system. This becomes possible by the versioning of data formats. |
+| A pulled MO will be extended | A collaboration process with the developers of the providing microservices has to be initiated. If the extension is also required by other services, a new requirement for the providing microservices has to be created. If this is not the case, the new requirement has to be implemented as an internal MO in the receiving microservice. | The technical communication should be as simple and managable as possible. Thus, MOs should not be dispersed on different services. |
+| Attributes of a pulled MO must be changed | A collaboration process with the developers of all receiving microservices has to be initiated. If the change is accepted by the developers of multiple receiving microservices, a new requirement for the providing microservice has to be formulated and a new version should be released. If the change is only required by the originally initiating microservice, a solution has to be implemented in this microservice. | Conflicts with pulled MOs have to be avoided. Thus, the software developers should be responsible by themselves regarding the robustness of their system. This becomes possible by the versioning of data formats. |
+| Attributes of a pulled MO are not required anymore | See previous solution (Attributes of a pulled MO have to be changed) | See reasoning before (Attributes of a pulled MO have to be changed) |
 
-Legende_: _Haltender MS_ beschreibt den Microservice, der das VO für andere Microservices bereitstellt. _Beziehender MS_ meint den Microservice, der das
-VO über die RESTful Schnittstelle abfragt.
+## Life cycles - Object event system
+If the provided data of a microservice is changed, other services may have to react. For example, users are often associated to other data objects. If a user deletes or deactivates his / her account, it is required for other microservices to detect this change and to delete the corresponding association.
 
-## Lebenszyklen - Object Event System
-Verändern sich die gehaltenen Daten in Microservices, müssen andere Microservices gegebenenfalls darauf reagieren können. Beispielsweise werden in
-Waves zu jeder Aktion verantwortliche Supporter assoziiert. Löscht oder deaktiviert ein solcher Supporter nun aber den eigenen Account, ist es sinnvoll,
-wenn Waves dies registrieren kann, den Nutzer aus der Assoziation entfernt und eventuell andere Nutzer über diesen Vorgang informiert.
+Thus the *Object Event System (OES)* ist introduced as ab additional communication layer. A modern message broker ist used to push updates of data to other services that have subscribed for these data. 
+Messages describe the data of change as well as the operation (`delete` or `update`). Afterwards, receiving microservices can request the data object again, to update all references or delete these references.
 
-Damit ein Microservice die Anderen über Veränderungen seines Datenbestands informieren kann, führen wir eine zusätzliche Kommunikationsebene ein.
-Dieses Kommunikationssystem zwischen den Microservice wird *Object Event System (OES)* genannt und basiert auf dem bestehenden
-Kommunikationsnetzwerk zwischen den Microservices. Das OES implementiert einen Nachrichtenaustausch nach dem PUSH-Prinzip. Das bedeutet, dass
-ein Microservice nach einer Änderung an einem VO allen anderen Microservices, die mit ihm bzgl. *Object Exchange* verbunden sind, eine Nachricht
-schickt. Diese Nachricht umfasst dabei die Information wann welches Objekt verändert wurde und welche Art der Veränderung vorgenommen wurde
-(löschen oder ändern). Beziehende Microservices können anschließend das Objekt neu beziehen (bei Veränderung) oder alle Referenzierungen auf das
-Objekt entfernen. Auch hier wird die Verantwortung den Entwicklern des jeweiligen Microservices überlassen, um eine möglichst freie Gestaltung des
-Umgangs mit derartigen Ereignissen zu erlauben.
-
-Die Nachrichten haben daher folgendes Format:
+The messages have the following format:
 ```
 {
   "sender": "microservice-uuid",
@@ -89,107 +50,60 @@ Die Nachrichten haben daher folgendes Format:
 }
 ```
 
-Während das Attribut `sender` den Microservice identifiziert, der das jeweilige Objekt hält, beschreibt `action` die verändernde Operation. `action` kann
-dabei drei verschiedene Werte annehmen: `delete`, `update`, `deactivated` oder `activated`. Im Unterschied zu `deactivated` beschreibt `delete` die
-vollständige Entfernung des Objekts aus dem Datenbestand. Es kann somit nie wieder abgerufen werden. `deactivated` hingegen ist ein Objekt dann,
-wenn es noch in der Datenbank gehalten wird, aber nicht mehr aktiv verwendet werden soll. Beispielsweise könnte ein Supporter `deactivated` sein,
-nachdem der Nutzer seinen Account gelöscht hat. Dies hat den Vorteil, dass der Supporter im Kontext vergangener Interaktion noch repräsentiert werden
-kann (etwa als verantwortlicher Ansprechpartner zu einer Aktion). Die `action` `activated` kann verwendet werden, um deaktivierte Objekte zu
-reaktivieren. Das Attribut object identifiziert das betroffene Objekt eindeutig mittels einer `UUID`. `type` unterstützt die Kontextualisierung des Objekts und
-beschreibt den Typ (die Klasse) des Objekts. Der mitgelieferte `timestamp` gibt Auskunft darüber, wann die Operation ausgeführt wurde und wird als Unix
-Timestamp (fortlaufender ganzzahliger Wert) abgebildet.
+While the attribut `sender` identifies the providing microservice, `action`  describes the altering operation. `action` can have four different values: `delete`, `update`, `deactivated` or `activated`. In difference to `deactivated`, `delete` describes the complete deletion of the object. Thus, it will not be possible to request the data object again. `deactivated` means that the object is still saved in the database, but not actively used anymore. The `action` `activated` can be used to reactivate deactivated objects. 
+The attribute `object` identifies the addressed object using an `UUID`. `type` supports the contextualization of the object and describes the type. The unix `timestamp` marks the time the operation has been executed.
 
-Neben Herausforderungen hinsichtlich der [Authentifizierung unter den Microservices](../action-based-user-rep), ist für die Realisierung von RESTful Webservices keine
-Registrierung des Beziehenden MS beim Haltenden MS notwendig. Daher ist es dem Haltenden MS nicht möglich den Beziehenden MS zu bestimmen und
-diesem so Nachrichten zu senden. Diese technische Herausforderung ließe sich mittels eines Bus-Systems angehen, welcher allerdings eine zentrale
-Komponente darstellt und somit das Ziel der Architektur und des Systems verfehlt. Somit müssen andere Lösungen gefunden werden. Wir verwenden
-daher einen Publish-Subscriber Mechanismus, mittels dem Nachrichten versendet werden. Jeder Beziehenden MS registriert sich bei einen Haltenden MS
-und so kann dieser anschließend die Nachricht an die betreffenden MS versenden. Es wird zudem angenommen, dass ein Beziehender MS bzgl. eines Haltenden MS 
-diese Rolle für die gesamte Dauer des Betriebs einnimmt und nicht alleine für einen beschränkten Zeitraum. Daher ist eine Abmeldung nicht
-notwendig. Um jedoch auch Entwicklungszyklen beachten zu können und bei Updates eines Beziehenden MS ggf. die Notwendigkeit und die Schnittstelle
-zu einem Haltenden MS entfällt, sollen Haltende MS andere MS dann aus ihrer Liste der Beziehenden MS entfernen, wenn auf eine an diese versendete
-Nachricht der Statuscode `404` geantwortet wird.
+It is not required to register the receiving microservice for the RESTful webservices at the providing microservices. Thus, it is not possible for the providing microservice to identify the receiving microservices and to send them messages. 
+A publish-subscriber mechanism addresses this technical challenge. Every receiving microservice registrates itself for specific messages from the providing microservice. Thus, a providing microservice is able to send messages to the receiving microservices. 
 
-## Kommunikation
-RESTful Webservices basieren auf Endpunkten die über eine URI erreicht werden können. Damit also verschiedene Microservices Daten austauschen
-können, müssen diese die Endpunkte der jeweils anderen Services kennen. Die Endpunkte, die ein Service bereitstellt werden in der Dokumentation des
-Services erfasst und können dort von anderen Entwickler-Teams eingesehen werden. Ein Microservice kann also einfach Daten von einem anderen
-Service abfragen, in dem er eine Verbindung zu einem Endpunkt herstellt. Auf dieser Kommunikationsebene kennt also jeder Microservice genau 
-die anderen Services, von denen er Daten abfragt.
+The open source [NATS](https://nats.io/) message broker is used to implement the publish-subscriber mechanism.
 
-Allerdings kann es notwendig sein, dass bereitstellende Services mit konsumierenden Services Kontakt aufnehmen (siehe Lebenszyklen - Object Event
-System). Für diesen Zweck müssen die bereitstellenden Services entsprechende Endpunkte der konsumierenden Services kennen. Somit müssen sich
-die konsumierenden Services bei den bereitstellenden Services registrieren. Dafür stellt jeder bereitstellende Service den Endpunkt
+## Communication
+RESTful webservices base on HTTP endpoints accessible by a URI. Thus, to exchange data, microservices need to know the endpoints that have to be well-documented using an [OpenAPI Specification](https://swagger.io/resources/open-api/).
+Thus, on this level of communication the microservices know each other.
 
-```
-/services/register
-```
+## Security
+In the first step, the communication is implemented only between docker containers. Thus, it is possible to separate the network of microservices from the rest of the word.
 
-zur Verfügung, zu dem folgende Informationen via POST übermittelt werden können:
+!!! The docker containers need to communicate using their internal docker IP addresses. Otherwise the messages would be send through the internet.
 
-```
-{
-"name": "microservice-id",
-"oes": "/pfad/zum/oes/endpunkt"
-}
-```
+## Consistency of interfaces
+The following guidelines are created to increase the consistency of the interfaces between the microservices.
 
-Ein Microservice ist damit in der Lage PUSH-Nachrichten im Sinne des OES zu versenden. Sollte es notwendig sein den Host zum Pfad zu ermitteln, kann
-auf die entsprechenden [Header Felder](https://www.w3.org/Protocols/rfc2616/rfc2616-sec14.html) zurückgegriffen werden.
+Considering the general guidelines regarding RESTful interfaces (Rodriguez, 2008), the request of data should be done using `HTTP GET`. Thus, it is still an open question how to specify messages without using a query body, but also without having a complex query string. Therefore, microservices have to provide two parameter for a `GET` request:
 
-## Sicherheit
-Im ersten Schritt der Umsetzung erfolgt die Kommunikation einzig zwischen Docker-Containern und ist daher von einem externen Netzwerk abgeschottet. 
-Allerdings muss dies bei der Erstellung und beim Deployment der Docker-Container beachtet werden, so dass die Messages nicht von einem Services über 
-Port 80 des hostenden Servers ins Internet und von dort wieder zurück zum Port 80 des selben Servers gesendet werden, nur um dort einem anderen 
-Docker-Container und dem dort laufenden Services zugesandt zu werden.
+First, a filter containing a stringified JSON with descriptions of partial defined entities. These are data containers implementing the same data structures as the managed entities of the microservice. In contrast to the MO, all values of partial defined entities are optional.
+Furthermore, also the values of the attributes are partially defined (that means only partially matching to existing values). Thus, values for filters can be described. 
 
-## Konsistenz der Schnittstellen
-Die Arbeit der Software Entwickler wird sehr vereinfacht, wenn die Schnittstellen konsistent entworfen sind. Um dies zu erreichen, sollen die Schnittstellen
-folgende Guidelines beachten und bereits bestehenden Schnittstellen nachfolgend hinsichtlich ihrer jeweiligen Syntax beschrieben werden.
+Additionally, it is required to relate the partial values to each other by the AND and OR relations. Moreover, some unary operations, like equality or a logical NOT are required. 
 
-Den generellen Ansprüchen an RESTful Interfaces (Rodriguez, 2008) folgend, gilt es zu klären, wie vorhandene Daten beim Abrufen gefiltert werden
-können. RESTful Interfaces sollen für die Abfrage von Daten via HTTP GET ermöglichen. Es stellt sich also die Frage, wie Queries angemessen
-spezifiziert werden können, ohne den Body eines HTTP Requests oder einen komplexen Query-String zu verwenden. Microservices sollen hierfür an
-einem GET Request zwei Parameter bereitstellen:
+These relations and operations are described by the value encoded n the query as a string. The value string consists of syntactical elements (structures like brackets and operations) as well as the names of the attributes of the partial defined entities. The allowed relations and operations are:
 
-Einen Filter, welcher ein stringified JSON mit Beschreibungen sogenannter partiell definierter Entitäten enthält. Dabei handelt es sich um Datencontainer,
-welche die selbe Struktur aufweisen wie die vom MS verwalteten Entitäten. Im Unterschied zu diesen sind in partiell definierten Entitäten allerdings alle
-Werte optional. Dies bedeutet beispielsweise, dass für das Objekt der Nutzer in Drops eine partiell definierte Entität nur eine Email oder nur einen
-Vornamen oder nur diese beiden Attribute enthalten kann. Zusätzlich können die Werte dieser Attribute ebenfalls partiell definiert sein. So kann etwa der
-Vorname eines Nutzers als String "Pet*" angegeben werden, wobei das "*" als Wildcard Operator fungiert und sowohl die Werte "Pete", als auch "Peter"
-oder ähnliches zu dem partiellen Wert äquivalent sind. Auf diese Weise lassen sich Parameter zum filtern beschreiben.
+Binary operations (relations between attributes of partial defined entities):
 
-Zusätzlich müssen diese partiellen Werte zueinander in Relation gebracht werden können. Es macht beispielsweise einen Unterschied ob ich nach
-Nutzern mit dem Namen "Pet*" UND der Email "test@test.com" suche, oder nach Nutzern mit dem Namen "Pet*" ODER der Email "test@test.com". Diese
-Relationen werden über den Wert der übergegebenen Query beschrieben, welcher als String angegeben wird. Er besteht aus einer Menge syntaktischer
-Elemente (Strukturelemente wie Klammern, und Operatoren) sowie die Bezeichner der Attribute der partiell definierten Entität enthalten dürfen. Die Menge
-erlaubter Operatoren wird nachfolgend definiert:
+* `_OR_` - logical OR
+* `_AND_` - logical AND
 
-Binäre Operatoren (beziehen sich auf Relationen zwischen den Attributen der partiell definierten Entität):
+Unary operations (addressing the values of the partial defined entities):
 
-* `_OR_` - logisches ODER
-* `_AND_` - logisches UND
-
-Unäre Operatoren (beziehen sich auf Relationen zwischen den Attributen und ihren jeweiligen Werten in der partiell definierten Entität):
-
-* `!` - logisches NOT
-* `=` - Gleichheit
-* `<` - Kleiner
-* `>` - Größer
-* `<=` - Kleiner-Gleich
-* `>=` - Größer-Gleich
-* `!=` - Ungleich
-* `IN` - Gesuchte Entität hat als Wert an dem Attribut einen Wert, welcher in einer Liste an dem Attribut in der partiell definierten Entität angegeben wurde.
-* `BETWEEN` - Gesuchte Entität hat als Wert an dem Attribut einen Wert, welcher zwischen zwei Werten liegt, die an dem Attribut in der partiell definierten Entität angegeben wurden.
-* `LIKE` - Gesuchte Entität hat als Wert an dem Attribut einen Wert, äquivalent zu dem partiell definierten Wert an dem Attribut der partiell definierten Entität.
+* `!` - logical NOT
+* `=` - equal
+* `<` - smaller
+* `>` - larger
+* `<=` - less or equal
+* `>=` - larger or equal
+* `!=` - unequal
+* `IN` - The value of the attribute of the addressed entity is in the list of possible values given by the partial defined entity.
+* `BETWEEN` - The value of the attribute of the addressed entity is between the two values given by the partial defined entity.
+* `LIKE` - The value of the attribute of the addressed entity is similar  to the value given by the partial defined entity.
 
 Beispiel: `first_name.LIKE_AND_email.=_AND_(crew.name.LIKE_OR_placeOfResidence.LIKE)`
 
-!!! Zu beachten ist, dass in der Query Attributpfade mittels `.` beschrieben werden können und die unären Operatoren stets an einen Attribut(-pfad) mittels `.` konkateniert werden.
+!!! User `.` to describe pathes of attributes in the query and the unary operations are always  concatinated to a attribute path by `.`.
 
-!!! Keys welche aus mehreren Wörtern zusammen gesetzt sind, werden in der cammel case Notation dargestellt, dabei wird sich an den JSON Style Guid von Google orientiert (Google, 2007).
+!!! Attribute names consisting of multiple words using the cammel case notation, as suggested by the JSON Style Guide of Google (Google, 2007).
 
-!!! Die konkrete Implementierung aller bisher vorhandenen Microservices kann im Bereich REST APIs dieser Dokumentation eingesehen werden.
+!!! See the implemention of all existing microservice in the [REST APIs documentation](../../technical-documentation/rest).
 
 ## References
 |   |   |
