@@ -53,97 +53,57 @@ The messages have the following format:
 While the attribut `sender` identifies the providing microservice, `action`  describes the altering operation. `action` can have four different values: `delete`, `update`, `deactivated` or `activated`. In difference to `deactivated`, `delete` describes the complete deletion of the object. Thus, it will not be possible to request the data object again. `deactivated` means that the object is still saved in the database, but not actively used anymore. The `action` `activated` can be used to reactivate deactivated objects. 
 The attribute `object` identifies the addressed object using an `UUID`. `type` supports the contextualization of the object and describes the type. The unix `timestamp` marks the time the operation has been executed.
 
-Neben Herausforderungen hinsichtlich der [Authentifizierung unter den Microservices](../action-based-user-rep), ist für die Realisierung von RESTful Webservices keine
-Registrierung des Beziehenden MS beim Haltenden MS notwendig. Daher ist es dem Haltenden MS nicht möglich den Beziehenden MS zu bestimmen und
-diesem so Nachrichten zu senden. Diese technische Herausforderung ließe sich mittels eines Bus-Systems angehen, welcher allerdings eine zentrale
-Komponente darstellt und somit das Ziel der Architektur und des Systems verfehlt. Somit müssen andere Lösungen gefunden werden. Wir verwenden
-daher einen Publish-Subscriber Mechanismus, mittels dem Nachrichten versendet werden. Jeder Beziehenden MS registriert sich bei einen Haltenden MS
-und so kann dieser anschließend die Nachricht an die betreffenden MS versenden. Es wird zudem angenommen, dass ein Beziehender MS bzgl. eines Haltenden MS 
-diese Rolle für die gesamte Dauer des Betriebs einnimmt und nicht alleine für einen beschränkten Zeitraum. Daher ist eine Abmeldung nicht
-notwendig. Um jedoch auch Entwicklungszyklen beachten zu können und bei Updates eines Beziehenden MS ggf. die Notwendigkeit und die Schnittstelle
-zu einem Haltenden MS entfällt, sollen Haltende MS andere MS dann aus ihrer Liste der Beziehenden MS entfernen, wenn auf eine an diese versendete
-Nachricht der Statuscode `404` geantwortet wird.
+It is not required to register the receiving microservice for the RESTful webservices at the providing microservices. Thus, it is not possible for the providing microservice to identify the receiving microservices and to send them messages. 
+A publish-subscriber mechanism addresses this technical challenge. Every receiving microservice registrates itself for specific messages from the providing microservice. Thus, a providing microservice is able to send messages to the receiving microservices. 
 
-## Kommunikation
-RESTful Webservices basieren auf Endpunkten die über eine URI erreicht werden können. Damit also verschiedene Microservices Daten austauschen
-können, müssen diese die Endpunkte der jeweils anderen Services kennen. Die Endpunkte, die ein Service bereitstellt werden in der Dokumentation des
-Services erfasst und können dort von anderen Entwickler-Teams eingesehen werden. Ein Microservice kann also einfach Daten von einem anderen
-Service abfragen, in dem er eine Verbindung zu einem Endpunkt herstellt. Auf dieser Kommunikationsebene kennt also jeder Microservice genau 
-die anderen Services, von denen er Daten abfragt.
+The open source [NATS](https://nats.io/) message broker is used to implement the publish-subscriber mechanism.
 
-Allerdings kann es notwendig sein, dass bereitstellende Services mit konsumierenden Services Kontakt aufnehmen (siehe Lebenszyklen - Object Event
-System). Für diesen Zweck müssen die bereitstellenden Services entsprechende Endpunkte der konsumierenden Services kennen. Somit müssen sich
-die konsumierenden Services bei den bereitstellenden Services registrieren. Dafür stellt jeder bereitstellende Service den Endpunkt
+## Communication
+RESTful webservices base on HTTP endpoints accessible by a URI. Thus, to exchange data, microservices need to know the endpoints that have to be well-documented using an [OpenAPI Specification](https://swagger.io/resources/open-api/).
+Thus, on this level of communication the microservices know each other.
 
-```
-/services/register
-```
+## Security
+In the first step, the communication is implemented only between docker containers. Thus, it is possible to separate the network of microservices from the rest of the word.
 
-zur Verfügung, zu dem folgende Informationen via POST übermittelt werden können:
+!!! The docker containers need to communicate using their internal docker IP addresses. Otherwise the messages would be send through the internet.
 
-```
-{
-"name": "microservice-id",
-"oes": "/pfad/zum/oes/endpunkt"
-}
-```
+## Consistency of interfaces
+The following guidelines are created to increase the consistency of the interfaces between the microservices.
 
-Ein Microservice ist damit in der Lage PUSH-Nachrichten im Sinne des OES zu versenden. Sollte es notwendig sein den Host zum Pfad zu ermitteln, kann
-auf die entsprechenden [Header Felder](https://www.w3.org/Protocols/rfc2616/rfc2616-sec14.html) zurückgegriffen werden.
+Considering the general guidelines regarding RESTful interfaces (Rodriguez, 2008), the request of data should be done using `HTTP GET`. Thus, it is still an open question how to specify messages without using a query body, but also without having a complex query string. Therefore, microservices have to provide two parameter for a `GET` request:
 
-## Sicherheit
-Im ersten Schritt der Umsetzung erfolgt die Kommunikation einzig zwischen Docker-Containern und ist daher von einem externen Netzwerk abgeschottet. 
-Allerdings muss dies bei der Erstellung und beim Deployment der Docker-Container beachtet werden, so dass die Messages nicht von einem Services über 
-Port 80 des hostenden Servers ins Internet und von dort wieder zurück zum Port 80 des selben Servers gesendet werden, nur um dort einem anderen 
-Docker-Container und dem dort laufenden Services zugesandt zu werden.
+First, a filter containing a stringified JSON with descriptions of partial defined entities. These are data containers implementing the same data structures as the managed entities of the microservice. In contrast to the MO, all values of partial defined entities are optional.
+Furthermore, also the values of the attributes are partially defined (that means only partially matching to existing values). Thus, values for filters can be described. 
 
-## Konsistenz der Schnittstellen
-Die Arbeit der Software Entwickler wird sehr vereinfacht, wenn die Schnittstellen konsistent entworfen sind. Um dies zu erreichen, sollen die Schnittstellen
-folgende Guidelines beachten und bereits bestehenden Schnittstellen nachfolgend hinsichtlich ihrer jeweiligen Syntax beschrieben werden.
+Additionally, it is required to relate the partial values to each other by the AND and OR relations. Moreover, some unary operations, like equality or a logical NOT are required. 
 
-Den generellen Ansprüchen an RESTful Interfaces (Rodriguez, 2008) folgend, gilt es zu klären, wie vorhandene Daten beim Abrufen gefiltert werden
-können. RESTful Interfaces sollen für die Abfrage von Daten via HTTP GET ermöglichen. Es stellt sich also die Frage, wie Queries angemessen
-spezifiziert werden können, ohne den Body eines HTTP Requests oder einen komplexen Query-String zu verwenden. Microservices sollen hierfür an
-einem GET Request zwei Parameter bereitstellen:
+These relations and operations are described by the value encoded n the query as a string. The value string consists of syntactical elements (structures like brackets and operations) as well as the names of the attributes of the partial defined entities. The allowed relations and operations are:
 
-Einen Filter, welcher ein stringified JSON mit Beschreibungen sogenannter partiell definierter Entitäten enthält. Dabei handelt es sich um Datencontainer,
-welche die selbe Struktur aufweisen wie die vom MS verwalteten Entitäten. Im Unterschied zu diesen sind in partiell definierten Entitäten allerdings alle
-Werte optional. Dies bedeutet beispielsweise, dass für das Objekt der Nutzer in Drops eine partiell definierte Entität nur eine Email oder nur einen
-Vornamen oder nur diese beiden Attribute enthalten kann. Zusätzlich können die Werte dieser Attribute ebenfalls partiell definiert sein. So kann etwa der
-Vorname eines Nutzers als String "Pet*" angegeben werden, wobei das "*" als Wildcard Operator fungiert und sowohl die Werte "Pete", als auch "Peter"
-oder ähnliches zu dem partiellen Wert äquivalent sind. Auf diese Weise lassen sich Parameter zum filtern beschreiben.
+Binary operations (relations between attributes of partial defined entities):
 
-Zusätzlich müssen diese partiellen Werte zueinander in Relation gebracht werden können. Es macht beispielsweise einen Unterschied ob ich nach
-Nutzern mit dem Namen "Pet*" UND der Email "test@test.com" suche, oder nach Nutzern mit dem Namen "Pet*" ODER der Email "test@test.com". Diese
-Relationen werden über den Wert der übergegebenen Query beschrieben, welcher als String angegeben wird. Er besteht aus einer Menge syntaktischer
-Elemente (Strukturelemente wie Klammern, und Operatoren) sowie die Bezeichner der Attribute der partiell definierten Entität enthalten dürfen. Die Menge
-erlaubter Operatoren wird nachfolgend definiert:
+* `_OR_` - logical OR
+* `_AND_` - logical AND
 
-Binäre Operatoren (beziehen sich auf Relationen zwischen den Attributen der partiell definierten Entität):
+Unary operations (addressing the values of the partial defined entities):
 
-* `_OR_` - logisches ODER
-* `_AND_` - logisches UND
-
-Unäre Operatoren (beziehen sich auf Relationen zwischen den Attributen und ihren jeweiligen Werten in der partiell definierten Entität):
-
-* `!` - logisches NOT
-* `=` - Gleichheit
-* `<` - Kleiner
-* `>` - Größer
-* `<=` - Kleiner-Gleich
-* `>=` - Größer-Gleich
-* `!=` - Ungleich
-* `IN` - Gesuchte Entität hat als Wert an dem Attribut einen Wert, welcher in einer Liste an dem Attribut in der partiell definierten Entität angegeben wurde.
-* `BETWEEN` - Gesuchte Entität hat als Wert an dem Attribut einen Wert, welcher zwischen zwei Werten liegt, die an dem Attribut in der partiell definierten Entität angegeben wurden.
-* `LIKE` - Gesuchte Entität hat als Wert an dem Attribut einen Wert, äquivalent zu dem partiell definierten Wert an dem Attribut der partiell definierten Entität.
+* `!` - logical NOT
+* `=` - equal
+* `<` - smaller
+* `>` - larger
+* `<=` - less or equal
+* `>=` - larger or equal
+* `!=` - unequal
+* `IN` - The value of the attribute of the addressed entity is in the list of possible values given by the partial defined entity.
+* `BETWEEN` - The value of the attribute of the addressed entity is between the two values given by the partial defined entity.
+* `LIKE` - The value of the attribute of the addressed entity is similar  to the value given by the partial defined entity.
 
 Beispiel: `first_name.LIKE_AND_email.=_AND_(crew.name.LIKE_OR_placeOfResidence.LIKE)`
 
-!!! Zu beachten ist, dass in der Query Attributpfade mittels `.` beschrieben werden können und die unären Operatoren stets an einen Attribut(-pfad) mittels `.` konkateniert werden.
+!!! User `.` to describe pathes of attributes in the query and the unary operations are always  concatinated to a attribute path by `.`.
 
-!!! Keys welche aus mehreren Wörtern zusammen gesetzt sind, werden in der cammel case Notation dargestellt, dabei wird sich an den JSON Style Guid von Google orientiert (Google, 2007).
+!!! Attribute names consisting of multiple words using the cammel case notation, as suggested by the JSON Style Guide of Google (Google, 2007).
 
-!!! Die konkrete Implementierung aller bisher vorhandenen Microservices kann im Bereich REST APIs dieser Dokumentation eingesehen werden.
+!!! See the implemention of all existing microservice in the [REST APIs documentation](../../technical-documentation/rest).
 
 ## References
 |   |   |
